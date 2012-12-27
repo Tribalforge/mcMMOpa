@@ -1,0 +1,17 @@
+name: mcMMO Party Admin
+main: uk.co.drnaylor.mcmmopartyadmin.PartyAdmin
+version: 0.2
+depend: [mcMMO]
+commands:
+    partyadmin:
+        aliases: [pa]
+        description: Administrate parties
+        permission: mcmmopartyadmin.commands.partyadmin
+        permission-message: You don't have permission to perform that command
+permissions:
+    mcmmopartyadmin.commands.partyadmin:
+        decription: Allows use of /partyadmin 
+        default: op
+    mcmmopartyadmin.spy:
+        decription: Spy on party chat!
+        default: op
