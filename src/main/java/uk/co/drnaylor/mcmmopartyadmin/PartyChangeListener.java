@@ -16,7 +16,6 @@ public class PartyChangeListener implements Listener {
     
     @EventHandler
     public void PartyChange(McMMOPartyChangeEvent event) {
-        PartyAdmin.plugin.getServer().broadcastMessage("Change Event");
         if (event.getNewParty() != null) {
             List<Player> players = PartyAPI.getOnlineMembers(event.getNewParty());
             for (Player a : players) {

@@ -21,7 +21,6 @@ public class PartyChatListener implements Listener {
     @EventHandler
     public void PartyChat(McMMOPartyChatEvent event)
     {
-        PartyAdmin.plugin.getServer().broadcastMessage("Chat Event");
         for (Player online : PartyAdmin.plugin.getServer().getOnlinePlayers()) {
           if (online.hasPermission("mcmmopartyadmin.spy") && (PartyAPI.getPartyName(online) != event.getParty()))
           {
