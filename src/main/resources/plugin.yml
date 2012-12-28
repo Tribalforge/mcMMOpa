@@ -1,6 +1,6 @@
 name: mcMMO Party Admin
 main: uk.co.drnaylor.mcmmopartyadmin.PartyAdmin
-version: "${project.version}"
+version: maven-version-number
 depend: [mcMMO]
 commands:
     partyadmin:
