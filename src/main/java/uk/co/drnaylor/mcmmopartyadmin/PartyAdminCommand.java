@@ -8,6 +8,7 @@ import com.gmail.nossr50.mcMMO;
 import com.gmail.nossr50.party.Party;
 import com.gmail.nossr50.party.PartyManager;
 import com.gmail.nossr50.util.Users;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.bukkit.ChatColor;
@@ -99,17 +100,17 @@ public class PartyAdminCommand implements CommandExecutor {
                             
                             // Remove offline players
                             
-                            boolean empty = false;
-                            while (!empty) {
+                            //boolean empty = false;
                                 List<String> members = target.getMembers();
                                 if (!members.isEmpty()) {
-                                    for (int i = 0; i < members.size(); i++) {
-                                        PartyManager.getInstance().removeFromParty(members.get(i), target);
+                                    List<String> mem = new ArrayList<String>();
+                                    mem.addAll(members);
+                                    for (int i = 0; i < mem.size(); i++) {
+                                        PartyManager.getInstance().removeFromParty(mem.get(i), target);
                                     }
                                 }
                                 target = PartyManager.getInstance().getParty(args[1]);
-                                empty = (target == null);
-                            }
+                              //  empty = (target == null);
                             
                             sender.sendMessage(ChatColor.DARK_AQUA + "The party " + oldparty + " has been deleted!");
                         } else {

@@ -1,6 +1,6 @@
 name: mcMMO Party Admin
 main: uk.co.drnaylor.mcmmopartyadmin.PartyAdmin
-version: 0.2
+version: "${project.version}"
 depend: [mcMMO]
 commands:
     partyadmin:
