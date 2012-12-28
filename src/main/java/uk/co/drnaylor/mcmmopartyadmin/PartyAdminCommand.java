@@ -265,7 +265,7 @@ public class PartyAdminCommand implements CommandExecutor {
         player.sendMessage(ChatColor.YELLOW + "/partyadmin list " + ChatColor.WHITE + "- List current parties");
         player.sendMessage(ChatColor.YELLOW + "/partyadmin rp <party> " + ChatColor.WHITE + "- Delete party");
         player.sendMessage(ChatColor.YELLOW + "/partyadmin apl <player> <party> " + ChatColor.WHITE + "- Add player to party");
-        player.sendMessage(ChatColor.YELLOW + "/partyadmin rpl <player> <party> " + ChatColor.WHITE + "- Remove player from party");
+        player.sendMessage(ChatColor.YELLOW + "/partyadmin rpl <player> " + ChatColor.WHITE + "- Remove player from party");
         player.sendMessage(ChatColor.YELLOW + "/partyadmin chown <player> <party> " + ChatColor.WHITE + "- Change ownership of party to player");
         player.sendMessage(ChatColor.YELLOW + "/partyadmin pc <party> " + ChatColor.WHITE + "- Chat to party without joining it");
     }
