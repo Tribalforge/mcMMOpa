@@ -124,9 +124,9 @@ public class PartyAdminCommand implements CommandExecutor {
                         String partyname;
                         if (targetPlayer != null) {
                             //Get the name!
-                            partyname = PartyAPI.getPartyName(player);
+                            partyname = PartyAPI.getPartyName(targetPlayer);
                             if (partyname != null || partyname != "") {   
-                                PartyAPI.removeFromParty(player);
+                                PartyAPI.removeFromParty(targetPlayer);
                                 targetPlayer.sendMessage(ChatColor.DARK_AQUA + "An admin has kicked you from the party");
                                 sender.sendMessage(ChatColor.DARK_AQUA + "The player " + args[1] + " is no longer in a party");
                             } else {
@@ -180,7 +180,7 @@ public class PartyAdminCommand implements CommandExecutor {
                             playername = targetPlayer.getName();
                             profile = Users.getProfile(targetPlayer);
                             if (PartyManager.getInstance().isParty(args[2])) {
-                                PartyAPI.addToParty(player, args[2]);
+                                PartyAPI.addToParty(targetPlayer, args[2]);
                                 sender.sendMessage(ChatColor.DARK_AQUA + "Player " + ChatColor.WHITE + playername + ChatColor.DARK_AQUA + " has been added to the party " + ChatColor.WHITE + args[2]);
                             }
                             else {
