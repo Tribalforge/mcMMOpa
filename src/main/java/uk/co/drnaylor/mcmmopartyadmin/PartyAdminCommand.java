@@ -50,28 +50,43 @@ public class PartyAdminCommand implements CommandExecutor {
             switch (args.length) {
                 case 1:
                     if (args[0].equalsIgnoreCase("list")) {
+                        // Get ALL the parties!
                         List<Party> parties = PartyAPI.getParties();
+                        
+                        // No parties? That's a shame...
                         if (parties.isEmpty()) {
                             player.sendMessage(ChatColor.DARK_AQUA + "There are no parties.");
                         } else {
+                            // Header
                             player.sendMessage(ChatColor.DARK_AQUA + "Current Parties");
                             player.sendMessage(ChatColor.DARK_AQUA + "===============");
+                            
+                            // Over each party...
                             for (Party a : parties) {
-                                Server server = PartyAdmin.plugin.getServer();
+                                
+                                // Get Party Leader
                                 String leader = PartyAPI.getPartyLeader(a.getName());
+                                
+                                // Start building new string
                                 StringBuffer tempList = new StringBuffer();
 
+                                // Over all players
                                 for (String otherPlayerName : a.getMembers()) {
                                     if (leader.equals(otherPlayerName)) {
-                                        tempList.append(ChatColor.GOLD);
-                                    } else if (server.getPlayer(otherPlayerName) != null) {
+                                        // Leader in Gold
+                                        tempList.append(ChatColor.GOLD); 
+                                    } else if (plugin.getServer().getPlayer(otherPlayerName) != null) {
+                                        // Online players in White
                                         tempList.append(ChatColor.WHITE);
                                     } else {
+                                        // Offline players in Grey
                                         tempList.append(ChatColor.GRAY);
                                     }
-
+                                    // Add name and space
                                     tempList.append(otherPlayerName + " ");
                                 }
+                                
+                                // Send the message
                                 player.sendMessage(ChatColor.DARK_AQUA + a.getName() + ": " + tempList);
 
                             }
@@ -82,10 +97,10 @@ public class PartyAdminCommand implements CommandExecutor {
 
                 case 2:
                     if (args[0].equalsIgnoreCase("removeparty") || args[0].equalsIgnoreCase("remparty") || args[0].equalsIgnoreCase("delparty") || args[0].equalsIgnoreCase("rp")) {
-                        
+
                         // Get the party
                         Party target = PartyManager.getInstance().getParty(args[1]);
-                        
+
                         if (target != null) {
                             String oldparty = args[1];
                             List<Player> players = Collections.unmodifiableList(PartyAPI.getOnlineMembers(target.getName()));
@@ -97,58 +112,63 @@ public class PartyAdminCommand implements CommandExecutor {
                                     PartyAPI.removeFromParty(a);
                                 }
                             }
-                            
+
                             // Remove offline players
-                            
-                            //boolean empty = false;
-                                List<String> members = target.getMembers();
-                                if (!members.isEmpty()) {
-                                    List<String> mem = new ArrayList<String>();
-                                    mem.addAll(members);
-                                    for (int i = 0; i < mem.size(); i++) {
-                                        PartyManager.getInstance().removeFromParty(mem.get(i), target);
-                                    }
+                            List<String> members = target.getMembers();
+                            if (!members.isEmpty()) {
+                                // To avoid comodification, we need to clone the list in memory, not just the pointer.
+                                List<String> mem = new ArrayList<String>();
+                                mem.addAll(members);
+                                for (int i = 0; i < mem.size(); i++) {
+                                    PartyManager.getInstance().removeFromParty(mem.get(i), target);
                                 }
-                                target = PartyManager.getInstance().getParty(args[1]);
-                              //  empty = (target == null);
-                            
+                            }
+                            target = PartyManager.getInstance().getParty(args[1]);
+
                             sender.sendMessage(ChatColor.DARK_AQUA + "The party " + oldparty + " has been deleted!");
                         } else {
                             sender.sendMessage(ChatColor.DARK_AQUA + "The party " + args[1] + " does not exist!");
                         }
                         return true;
-                        
+
                     } else if (args[0].equalsIgnoreCase("removeplayer") || args[0].equalsIgnoreCase("rpl") || args[0].equalsIgnoreCase("kickplayer")) {
                         String playername;
                         Player targetPlayer = plugin.getServer().getPlayer(args[1]);
-                        String partyname;
+                        // If the player is online
                         if (targetPlayer != null) {
-                            //Get the name!
-                            partyname = PartyAPI.getPartyName(targetPlayer);
-                            if (partyname != null || partyname != "") {   
+                            // Is the player in a party?
+                            if (PartyAPI.inParty(targetPlayer)) {
+                                // Remove from the party!
                                 PartyAPI.removeFromParty(targetPlayer);
+
+                                // Tell them, and the sender
                                 targetPlayer.sendMessage(ChatColor.DARK_AQUA + "An admin has kicked you from the party");
                                 sender.sendMessage(ChatColor.DARK_AQUA + "The player " + args[1] + " is no longer in a party");
                             } else {
+                                // Tell the sender that the can't do that!
                                 sender.sendMessage(ChatColor.DARK_AQUA + "The player " + args[1] + " is not in a party");
                             }
                         } else {
                             //Check to see if there is an offline player
                             OfflinePlayer targetOfflinePlayer = plugin.getServer().getOfflinePlayer(args[1]);
+                            
+                            // Is there a player that has joined the server before?
                             if (targetOfflinePlayer == null) {
-                               sender.sendMessage(ChatColor.DARK_AQUA + "The player " + args[1] + " cannot be found!");
+                                sender.sendMessage(ChatColor.DARK_AQUA + "The player " + args[1] + " cannot be found!");
                                 return true;
                             }
-                            
-                                playername = targetOfflinePlayer.getName();
-                                Party party = PartyManager.getInstance().getPlayerParty(playername);
-                                if (party == null) {
-                                    sender.sendMessage(ChatColor.DARK_AQUA + "The player " + args[1] + " is not in a party");
-                                    return true;
-                                } else {
-                                    PartyManager.getInstance().removeFromParty(playername, party);
-                                    sender.sendMessage(ChatColor.DARK_AQUA + "The player " + args[1] + " is no longer in a party");                                    
-                                }
+
+                            playername = targetOfflinePlayer.getName();
+                            Party party = PartyManager.getInstance().getPlayerParty(playername);
+                            if (party == null) {
+                                // Not in a party
+                                sender.sendMessage(ChatColor.DARK_AQUA + "The player " + args[1] + " is not in a party");
+                                return true;
+                            } else {
+                                // Remove!
+                                PartyManager.getInstance().removeFromParty(playername, party);
+                                sender.sendMessage(ChatColor.DARK_AQUA + "The player " + args[1] + " is no longer in a party");
+                            }
                         }
                         return true;
                     } else {
@@ -158,15 +178,19 @@ public class PartyAdminCommand implements CommandExecutor {
 
                 case 3:
                     if (args[0].equalsIgnoreCase("addplayer") || args[0].equalsIgnoreCase("apl")) {
+                        
                         String playername;
+                        // Get the player
                         Player targetPlayer = plugin.getServer().getPlayer(args[1]);
                         PlayerProfile profile = null;
+
+                        // If there is no player, then we check for an offline player
                         if (targetPlayer == null) {
-                            //Check to see if there is an offline player
                             OfflinePlayer targetOfflinePlayer = plugin.getServer().getOfflinePlayer(args[1]);
                             playername = targetOfflinePlayer.getName();
                             profile = Users.getProfile(playername);
 
+                            // The player needs to be online to add them to a party, however.
                             if (playername == null) {
                                 sender.sendMessage(ChatColor.DARK_AQUA + "The player " + args[1] + " cannot be found!");
                                 return true;
@@ -175,18 +199,18 @@ public class PartyAdminCommand implements CommandExecutor {
                                 return true;
                             }
                         }
-                        
-                        //Get the name!
-                            playername = targetPlayer.getName();
-                            profile = Users.getProfile(targetPlayer);
-                            if (PartyManager.getInstance().isParty(args[2])) {
-                                PartyAPI.addToParty(targetPlayer, args[2]);
-                                sender.sendMessage(ChatColor.DARK_AQUA + "Player " + ChatColor.WHITE + playername + ChatColor.DARK_AQUA + " has been added to the party " + ChatColor.WHITE + args[2]);
-                            }
-                            else {
-                                sender.sendMessage(ChatColor.DARK_AQUA + "That party cannot be found.");
-                            }
-                            return true;
+
+                        //OK! So the player is online. Get the name!
+                        playername = targetPlayer.getName();
+                        if (PartyManager.getInstance().isParty(args[2])) {
+                            // Add them to the party!
+                            PartyAPI.addToParty(targetPlayer, args[2]);
+                            sender.sendMessage(ChatColor.DARK_AQUA + "Player " + ChatColor.WHITE + playername + ChatColor.DARK_AQUA + " has been added to the party " + ChatColor.WHITE + args[2]);
+                        } else {
+                            // Wait... there is no party!
+                            sender.sendMessage(ChatColor.DARK_AQUA + "That party cannot be found.");
+                        }
+                        return true;
                     } else if (args[0].equalsIgnoreCase("changeowner") || args[0].equalsIgnoreCase("chown")) {
                         String playername;
                         Player targetPlayer = plugin.getServer().getPlayer(args[1]);
@@ -200,23 +224,29 @@ public class PartyAdminCommand implements CommandExecutor {
                         }
 
                         if (playername == null) {
+                            // Player doesn't exist
                             sender.sendMessage(ChatColor.DARK_AQUA + "The player " + args[1] + " cannot be found!");
                             return true;
                         }
 
+                        // Player exists! Party
                         Party party = PartyManager.getInstance().getParty(args[2]);
                         if (party != null) {
+                            // Get member list
                             List<String> members = party.getMembers();
                             if (members.contains(playername)) {
+                                // If the player is in the party, set them as leader
                                 sender.sendMessage(ChatColor.DARK_AQUA + "Player " + ChatColor.WHITE + playername + ChatColor.DARK_AQUA + " is now the owner of " + ChatColor.WHITE + args[2]);
                                 PartyAPI.setPartyLeader(party.getName(), playername);
                                 if (targetPlayer != null) {
                                     targetPlayer.sendMessage(ChatColor.DARK_AQUA + "You are now the owner of " + ChatColor.WHITE + args[2]);
                                 }
                             } else {
+                                // Or not, if they aren't in the party
                                 sender.sendMessage(ChatColor.DARK_AQUA + "Player " + ChatColor.WHITE + playername + ChatColor.DARK_AQUA + " is not a member of the party " + ChatColor.WHITE + args[2]);
                             }
                         } else {
+                            // The party is just not there!
                             sender.sendMessage(ChatColor.DARK_AQUA + "That party cannot be found.");
                         }
                         return true;
@@ -231,8 +261,8 @@ public class PartyAdminCommand implements CommandExecutor {
                     return true;
             }
         } else {
+            // No perms! Leave us be!
             player.sendMessage(ChatColor.RED + "You do not have permission to do this");
-
         }
 
         return true;
