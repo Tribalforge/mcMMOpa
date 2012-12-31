@@ -287,6 +287,15 @@ public class PartyAdminCommand implements CommandExecutor {
         String message = buffer.toString();
         
         ChatAPI.sendPartyChat(sender.getName(), args[1], message);
+        
+        if (sender instanceof Player) {
+            Player send = (Player) sender;
+            if (!PartySpy.isSpy(send)) {
+                sender.sendMessage(ChatColor.DARK_AQUA + "WARNING: Party Spy is OFF. Toggle with " + ChatColor.YELLOW + "/partyspy");
+                String p2 = ChatColor.GRAY + "[" + args[1] + "] " + ChatColor.GREEN + " (" + ChatColor.WHITE + sender.getName() + ChatColor.GREEN + ") ";
+                sender.sendMessage(p2 + message); 
+            }
+        }
     }
 
     private void listCommands(CommandSender player) {

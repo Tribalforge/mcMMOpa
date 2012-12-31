@@ -22,7 +22,7 @@ public class PartyChatListener implements Listener {
     public void PartyChat(McMMOPartyChatEvent event)
     {
         for (Player online : PartyAdmin.plugin.getServer().getOnlinePlayers()) {
-          if (online.hasPermission("mcmmopartyadmin.spy")) {
+          if (PartySpy.isSpy(online)) {
               if (!PartyAPI.inParty(online) || (PartyAPI.getPartyName(online) != event.getParty())) {
                 String p2 = ChatColor.GRAY + "[Spy: " + event.getParty() + "] " + ChatColor.GREEN + " (" + ChatColor.WHITE + event.getSender() + ChatColor.GREEN + ") ";
                 online.sendMessage(p2 + event.getMessage());

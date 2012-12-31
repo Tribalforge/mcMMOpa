@@ -41,6 +41,7 @@ public class PartyAdmin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(pc, this);
 
         getCommand("pa").setExecutor(new PartyAdminCommand(this));
+        getCommand("partyspy").setExecutor(new PartySpy(this));
         this.getServer().getLogger().info("[mcMMO Party Admin] mcMMO Party Admin is now enabled.");
     }
 
