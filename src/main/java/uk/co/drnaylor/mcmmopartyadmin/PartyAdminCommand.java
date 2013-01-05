@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -286,7 +285,11 @@ public class PartyAdminCommand implements CommandExecutor {
 
         String message = buffer.toString();
         
-        ChatAPI.sendPartyChat(sender.getName(), args[1], message);
+        if (!(sender instanceof Player)) {
+            ChatAPI.sendPartyChat("*Console*", args[1], message);
+        } else {
+            ChatAPI.sendPartyChat(sender.getName(), args[1], message);
+        }
         
         if (sender instanceof Player) {
             Player send = (Player) sender;
@@ -295,7 +298,7 @@ public class PartyAdminCommand implements CommandExecutor {
                 String p2 = ChatColor.GRAY + "[" + args[1] + "] " + ChatColor.GREEN + " (" + ChatColor.WHITE + sender.getName() + ChatColor.GREEN + ") ";
                 sender.sendMessage(p2 + message); 
             }
-        }
+        } 
     }
 
     private void listCommands(CommandSender player) {
