@@ -17,18 +17,28 @@ public class PartyChangeListener implements Listener {
     @EventHandler
     public void PartyChange(McMMOPartyChangeEvent event) {
         if (event.getNewParty() != null) {
-            List<Player> players = PartyAPI.getOnlineMembers(event.getNewParty());
-            for (Player a : players) {
-                if (a == event.getPlayer()) continue;
-                a.sendMessage(ChatColor.YELLOW + event.getPlayer().getName() + ChatColor.GREEN + " has joined your party.");
+            try {
+                List<Player> players = PartyAPI.getOnlineMembers(event.getNewParty());
+                for (Player a : players) {
+                    if (a == event.getPlayer()) {
+                        continue;
+                    }
+                    a.sendMessage(ChatColor.YELLOW + event.getPlayer().getName() + ChatColor.GREEN + " has joined your party.");
+                }
+            } finally {
             }
         }
         
         if (event.getOldParty() != null) {
-            List<Player> players = PartyAPI.getOnlineMembers(event.getOldParty());
-            for (Player a : players) {
-                if (a == event.getPlayer()) continue;
-                a.sendMessage(ChatColor.YELLOW + event.getPlayer().getName() + ChatColor.GREEN + " has left your party.");
+            try {
+                List<Player> players = PartyAPI.getOnlineMembers(event.getOldParty());
+                for (Player a : players) {
+                    if (a == event.getPlayer()) {
+                        continue;
+                    }
+                    a.sendMessage(ChatColor.YELLOW + event.getPlayer().getName() + ChatColor.GREEN + " has left your party.");
+                }
+            } finally {
             }
         }
         
