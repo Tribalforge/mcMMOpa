@@ -4,7 +4,7 @@
 
     <groupId>uk.co.drnaylor.mcmmopartyadmin</groupId>
     <artifactId>mcmmoPartyAdmin</artifactId>
-    <version>0.4-SNAPSHOT (1.4-dev5 compat)</version>
+    <version>0.4b1 (1.4-dev5 compat)</version>
     <packaging>jar</packaging>
 
     <name>mcmmoPartyAdmin</name>
