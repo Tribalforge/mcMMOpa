@@ -21,10 +21,6 @@ package uk.co.drnaylor.mcmmopartyadmin;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import com.gmail.nossr50.mcMMO;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 import org.bukkit.plugin.Plugin;
 
 public class PartyAdmin extends JavaPlugin {
@@ -33,19 +29,10 @@ public class PartyAdmin extends JavaPlugin {
     public static mcMMO mcmmo;
     public PartyChangeListener pa;
     public PartyChatListener pc;
-    private Properties _props;
-    private String _version;
 
     @Override
     public void onEnable() {
         plugin = this;
-        try {
-            _props = getPropertiesFromClasspath("resource.properties");
-            _version = _props.getProperty("app.version");
-        }
-        catch (IOException e) {
-            _version = "dualspiral";
-        }
         if (!isMcmmoAvailable()) {
             this.getServer().getLogger().severe("mcMMO is not loaded on the server.");
             this.getPluginLoader().disablePlugin(this);
@@ -61,7 +48,7 @@ public class PartyAdmin extends JavaPlugin {
 
         getCommand("pa").setExecutor(new PartyAdminCommand(this));
         getCommand("partyspy").setExecutor(new PartySpy(this));
-        this.getServer().getLogger().info("[mcMMO Party Admin] mcMMO Party Admin " + _version + " is now enabled.");
+        this.getServer().getLogger().info("[mcMMO Party Admin] mcMMO Party Admin " + this.getDescription().getVersion() + " is now enabled.");
     }
 
     @Override
@@ -80,21 +67,5 @@ public class PartyAdmin extends JavaPlugin {
         }
         mcmmo = (mcMMO) _plugin;
         return true;
-    }
-
-    public Properties getPropertiesFromClasspath(String propFileName) throws IOException {
-        // loading xmlProfileGen.properties from the classpath
-        Properties props = new Properties();
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(propFileName);
-        //.getClass().getClassLoader().getResourceAsStream(propFileName);
-
-        if (inputStream == null) {
-            throw new FileNotFoundException("property file '" + propFileName
-                    + "' not found in the classpath");
-        }
-
-        props.load(inputStream);
-
-        return props;
     }
 }
