@@ -51,7 +51,7 @@ public class PartyAdmin extends JavaPlugin {
             this.getPluginLoader().disablePlugin(this);
             return;
         }
-        
+        this.getServer().getLogger().info("[mcMMO Party Admin] mcMMO 1.4 has been detected.");
         pa = new PartyChangeListener();
         pc = new PartyChatListener();
 
