@@ -21,6 +21,10 @@ package uk.co.drnaylor.mcmmopartyadmin;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import com.gmail.nossr50.mcMMO;
+import com.gmail.nossr50.party.PartyManager;
+import com.gmail.nossr50.util.Users;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
 import org.bukkit.plugin.Plugin;
 
 public class PartyAdmin extends JavaPlugin {
@@ -40,6 +44,14 @@ public class PartyAdmin extends JavaPlugin {
         }
         this.getServer().getLogger().info("[mcMMO Party Admin] mcMMO hooked.");
 
+        this.getServer().getLogger().info("[mcMMO Party Admin] Checking to see if mcMMO 1.4+ is installed...");
+        
+        if (!checkForRequiredMethod()) {
+            this.getServer().getLogger().severe("[mcMMO Party Admin] mcMMO 1.4 is NOT installed. Disabling.");
+            this.getPluginLoader().disablePlugin(this);
+            return;
+        }
+        
         pa = new PartyChangeListener();
         pc = new PartyChatListener();
 
@@ -48,12 +60,25 @@ public class PartyAdmin extends JavaPlugin {
 
         getCommand("pa").setExecutor(new PartyAdminCommand(this));
         getCommand("partyspy").setExecutor(new PartySpy(this));
-        this.getServer().getLogger().info("[mcMMO Party Admin] mcMMO Party Admin " + this.getDescription().getVersion() + " is now enabled.");
+        this.getServer().getLogger().log(Level.INFO, "[mcMMO Party Admin] mcMMO Party Admin {0} is now enabled.", this.getDescription().getVersion());
     }
 
     @Override
     public void onDisable() {
         this.getServer().getLogger().info("mcMMO Party Admin is disabling.");
+    }
+    
+    private boolean checkForRequiredMethod() {
+   
+        // Reflection!
+        try {
+            Method m = PartyManager.class.getMethod("disbandParty");
+            Method n = Users.class.getMethod("getPlayer");
+            return ((m != null) && (n != null));
+        } catch (Exception e) {
+            // doesn't matter
+        }
+        return false;
     }
 
     public boolean isMcmmoAvailable() {
