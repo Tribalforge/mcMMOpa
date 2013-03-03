@@ -20,7 +20,7 @@
 package uk.co.drnaylor.mcmmopartyadmin;
 
 import com.gmail.nossr50.api.PartyAPI;
-import com.gmail.nossr50.party.Party;
+import com.gmail.nossr50.datatypes.party.Party;
 import java.util.List;
 
 public class Util {

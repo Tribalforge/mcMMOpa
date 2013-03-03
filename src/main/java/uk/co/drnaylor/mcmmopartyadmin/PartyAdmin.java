@@ -22,7 +22,7 @@ package uk.co.drnaylor.mcmmopartyadmin;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.gmail.nossr50.mcMMO;
 import com.gmail.nossr50.party.PartyManager;
-import com.gmail.nossr50.util.Users;
+import com.gmail.nossr50.util.player.UserManager;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
 import org.bukkit.plugin.Plugin;
@@ -73,7 +73,7 @@ public class PartyAdmin extends JavaPlugin {
         // Reflection!
         try {
             Method m = PartyManager.class.getMethod("disbandParty");
-            Method n = Users.class.getMethod("getPlayer");
+            Method n = UserManager.class.getMethod("getPlayer");
             return ((m != null) && (n != null));
         } catch (Exception e) {
             // doesn't matter

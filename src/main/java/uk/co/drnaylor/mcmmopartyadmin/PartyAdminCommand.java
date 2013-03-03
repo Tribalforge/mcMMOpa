@@ -21,12 +21,12 @@ package uk.co.drnaylor.mcmmopartyadmin;
 
 import com.gmail.nossr50.api.ChatAPI;
 import com.gmail.nossr50.api.PartyAPI;
-import com.gmail.nossr50.datatypes.McMMOPlayer;
+import com.gmail.nossr50.datatypes.party.Party;
+import com.gmail.nossr50.datatypes.player.McMMOPlayer;
 import com.gmail.nossr50.events.party.McMMOPartyChangeEvent;
 import com.gmail.nossr50.locale.LocaleLoader;
-import com.gmail.nossr50.party.Party;
 import com.gmail.nossr50.party.PartyManager;
-import com.gmail.nossr50.util.Users;
+import com.gmail.nossr50.util.player.UserManager;
 import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -159,7 +159,7 @@ public class PartyAdminCommand implements CommandExecutor {
                                 return true;
                             }
                             
-                            McMMOPlayer mcMMOPlayer = Users.getPlayer(targetOfflinePlayer.getName());
+                            McMMOPlayer mcMMOPlayer = UserManager.getPlayer(targetOfflinePlayer.getName());
 
                             if (mcMMOPlayer == null) {
                                 sender.sendMessage(ChatColor.DARK_AQUA + "The player " + args[1] + " cannot be found in the mcMMO system!");
@@ -216,7 +216,7 @@ public class PartyAdminCommand implements CommandExecutor {
                         
                         // Player is offline. 
 
-                        McMMOPlayer mcplayer = Users.getPlayer(targetPlayer.getName());
+                        McMMOPlayer mcplayer = UserManager.getPlayer(targetPlayer.getName());
                         
                         try {
                             mcplayer.removeParty(); // Remove the party before adding them
@@ -237,7 +237,7 @@ public class PartyAdminCommand implements CommandExecutor {
                             return true;
                         }
 
-                        McMMOPlayer mcplayer = Users.getPlayer(targetPlayer);
+                        McMMOPlayer mcplayer = UserManager.getPlayer(targetPlayer);
                         Party party = mcplayer.getParty();
                         
                         if (party.getName().equals(args[2])) {
