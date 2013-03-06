@@ -19,9 +19,7 @@
  **/
 package uk.co.drnaylor.mcmmopartyadmin;
 
-import com.gmail.nossr50.api.PartyAPI;
 import com.gmail.nossr50.events.party.McMMOPartyChangeEvent;
-import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,7 +29,8 @@ public class PartyChangeListener implements Listener {
 
     @EventHandler
     public void PartyChange(McMMOPartyChangeEvent event) {
-        if (event.getNewParty() != null) {
+// No longer needed, as mcMMO takes care of this itself
+ /* if (event.getNewParty() != null) {
             try {
                 List<Player> players = PartyAPI.getOnlineMembers(event.getNewParty());
                 if (players != null && !players.isEmpty()) {
@@ -60,7 +59,7 @@ public class PartyChangeListener implements Listener {
             } finally {
             }
         }
-
+*/
         String oldp = event.getOldParty();
         String newp = event.getNewParty();
 

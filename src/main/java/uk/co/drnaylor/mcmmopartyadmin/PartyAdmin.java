@@ -67,7 +67,7 @@ public class PartyAdmin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.getServer().getLogger().info("mcMMO Party Admin is disabling.");
+        this.getServer().getLogger().info("mcMMO Party Admin is now disabled.");
     }
     
     private boolean checkForRequiredMethod() {
