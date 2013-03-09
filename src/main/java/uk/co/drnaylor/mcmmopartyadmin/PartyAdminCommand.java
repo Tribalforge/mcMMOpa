@@ -241,7 +241,9 @@ public class PartyAdminCommand implements CommandExecutor {
                         Party party = mcplayer.getParty();
                         
                         if (party.getName().equals(args[2])) {
-                            PartyAPI.setPartyLeader(targetPlayer.getName(), party.getName());
+                            PartyManager.setPartyLeader(targetPlayer.getName(), party);
+                            // The PartyAPI doesn't want to seem to work.
+                            // PartyAPI.setPartyLeader(targetPlayer.getName(), party.getName());
                             sender.sendMessage(ChatColor.DARK_AQUA + "Player " + ChatColor.GOLD + targetPlayer.getName() + ChatColor.DARK_AQUA + " is now the leader of their party.");
                         } else {
                             sender.sendMessage(ChatColor.DARK_AQUA + "Player " + ChatColor.WHITE + targetPlayer.getName() + ChatColor.DARK_AQUA + " is not in the party " + ChatColor.WHITE + args[2]);
