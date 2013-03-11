@@ -40,8 +40,8 @@ There are currently no configuation options.
 Accesses the Party Admin commands:
 
 * ````/partyadmin rp [party]```` – Delete party [party]
-* ````/partyadmin apl [player] [party]```` – Add [player] to [party] (the player must be online)
-* ````/partyadmin rpl [player]```` – Remove [player] from current party. (the player must be online)
+* ````/partyadmin apl [player] [party]```` – Add [player] to [party] - _NB: the player must be online_
+* ````/partyadmin rpl [player]```` – Remove [player] from current party. _NB: the player must be online_
 * ````/partyadmin chown [player] [party]```` – Change owner of [party] to [player]
 * ````/partyadmin pc [party] [message]```` – Chat to [party]
 
