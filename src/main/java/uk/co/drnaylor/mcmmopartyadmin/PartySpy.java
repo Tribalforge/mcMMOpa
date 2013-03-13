@@ -1,89 +1,92 @@
 /* 
  * Copyright (C) 2013 Dr Daniel R. Naylor
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
- * and associated documentation files (the "Software"), to deal in the Software without restriction, 
- * including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
- * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, 
- * subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all copies or substantial 
- * portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
- * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * This file is part of mcMMO Party Admin.
+ *
+ * mcMMO Party Admin is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * mcMMO Party Admin is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with mcMMO Party Admin.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **/
 package uk.co.drnaylor.mcmmopartyadmin;
 
 import java.util.List;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import uk.co.drnaylor.mcmmopartyadmin.permissions.PermissionHandler;
 
-public class PartySpy implements CommandExecutor {
+public class PartySpy {
     
-    private PartyAdmin _plugin;
-    private static List<String> _spies;
+    private List<String> spies;
     
-    public PartySpy(PartyAdmin plugin) {
-        _plugin = plugin;
-        _plugin.reloadConfig();
-        _spies = _plugin.getConfig().getStringList("partyspy");
+    public PartySpy(List<String> spies) {
+        this.spies = spies;
     }
     
-    public boolean onCommand(CommandSender cs, Command cmnd, String string, String[] args) {
-        if (cmnd.getName().equalsIgnoreCase("partyspy")) {
-            if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
-                if (!(cs instanceof Player) || cs.hasPermission("mcmmopartyadmin.admin") || cs.isOp()) {
-                    _plugin.reloadConfig();
-                    _spies = _plugin.getConfig().getStringList("partyspy");
-                }
-            }
-            else if (args.length == 1 && args[0].equalsIgnoreCase("save")) {
-                    if (!(cs instanceof Player) || cs.hasPermission("mcmmopartyadmin.admin") || cs.isOp()) {
-                        _plugin.getConfig().set("partyspy", _spies);
-                        _plugin.saveConfig();
-                    }
-                }
-            else if(args.length == 0) {
-                if (cs instanceof Player) {
-                    Player player = (Player) cs;
-                    toggleSpy(player);
-                    cs.sendMessage(ChatColor.DARK_AQUA + "PartySpy is now toggled to " + ChatColor.YELLOW + (isSpy(player) ? "on" : "off") );
-                    _plugin.getConfig().set("partyspy", _spies);
-                    _plugin.saveConfig();
-                }
-                else {
-                    cs.sendMessage(ChatColor.DARK_AQUA + "Console, you can't set this!");
-                }
-            }
-            else {
-                cs.sendMessage(ChatColor.DARK_AQUA + "Incorrect usage!");
-            }
-            return true;
+    /**
+     * Returns the list of spies.
+     * 
+     * @return List of spies.
+     */
+    public List<String> getSpies() {
+        return spies;
+    }
+    
+    /**
+     * Checks to see if a player is a PartySpy
+     * 
+     * @param player Player to check
+     * @return true if so, false otherwise
+     */
+    public boolean isSpy(Player player) {
+        if (PermissionHandler.canSpy(player)) {
+            return spies.contains(player.getName());
+        }
+        else if (spies.contains(player.getName())) {
+            // This line removes the player in question if the player doesn't have
+            // permission, but is in the spyers file.
+            spies.remove(player.getName());
+            saveList();
         }
         return false;
     }
     
-    public static boolean isSpy(Player player) {
-        if (player.hasPermission("mcmmopartyadmin.spy") || player.isOp()) {
-            return _spies.contains(player.getName());
-        }
-        return false;
-    }
-    
-    public static void toggleSpy(Player player) {
-        if (_spies.contains(player.getName())) {
-            _spies.remove(player.getName());
+    /**
+     * Toggles the spy state of the player.
+     * 
+     * @param player Player to toggle
+     */
+    public void toggleSpy(Player player) {
+        if (spies.contains(player.getName())) {
+            spies.remove(player.getName());
         }
         else {
-            _spies.add(player.getName());
+            spies.add(player.getName());
         }
+    }
+    
+    /**
+     * Reload the config file and get the list of players with PartySpy enabled.
+     */
+    public void reloadSpies() {
+        PartyAdmin.plugin.reloadConfig();
+        spies = PartyAdmin.plugin.getConfig().getStringList("partyspy");
+        saveList();
+    }
+    
+    /**
+     * Update and save the config file.
+     */
+    public void saveList() {
+        PartyAdmin.plugin.getConfig().set("partyspy", spies);
+        PartyAdmin.plugin.saveConfig();
     }
 }

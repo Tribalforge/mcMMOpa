@@ -1,25 +1,30 @@
 /* 
  * Copyright (C) 2013 Dr Daniel R. Naylor
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
- * and associated documentation files (the "Software"), to deal in the Software without restriction, 
- * including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
- * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, 
- * subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all copies or substantial 
- * portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
- * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
- * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * This file is part of mcMMO Party Admin.
+ *
+ * mcMMO Party Admin is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * mcMMO Party Admin is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with mcMMO Party Admin.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **/
 package uk.co.drnaylor.mcmmopartyadmin;
 
+import uk.co.drnaylor.mcmmopartyadmin.commands.PartyAdminCommand;
+import uk.co.drnaylor.mcmmopartyadmin.commands.PartySpyCommand;
+import uk.co.drnaylor.mcmmopartyadmin.listeners.PartyChangeListener;
+import uk.co.drnaylor.mcmmopartyadmin.listeners.PartyChatListener;
 import com.gmail.nossr50.datatypes.party.Party;
+import com.gmail.nossr50.locale.LocaleLoader;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.gmail.nossr50.mcMMO;
 import com.gmail.nossr50.party.PartyManager;
@@ -33,8 +38,10 @@ public class PartyAdmin extends JavaPlugin {
 
     public static PartyAdmin plugin;
     public static mcMMO mcmmo;
-    public PartyChangeListener pa;
-    public PartyChatListener pc;
+    private PartyChangeListener pa;
+    private PartyChatListener pc;
+    private PartySpy ps;
+
 
     @Override
     public void onEnable() {
@@ -60,8 +67,12 @@ public class PartyAdmin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(pa, this);
         getServer().getPluginManager().registerEvents(pc, this);
 
-        getCommand("pa").setExecutor(new PartyAdminCommand(this));
-        getCommand("partyspy").setExecutor(new PartySpy(this));
+        getCommand("pa").setExecutor(new PartyAdminCommand());
+        getCommand("partyspy").setExecutor(new PartySpyCommand());
+        
+        this.reloadConfig();
+        ps = new PartySpy(plugin.getConfig().getStringList("partyspy"));
+        
         this.getServer().getLogger().log(Level.INFO, "[mcMMO Party Admin] mcMMO Party Admin {0} is now enabled.", this.getDescription().getVersion());
     }
 
@@ -69,13 +80,19 @@ public class PartyAdmin extends JavaPlugin {
     public void onDisable() {
         this.getServer().getLogger().info("mcMMO Party Admin is now disabled.");
     }
-    
+
+    /**
+     * Checks to see if the required non-API methods are available in mcMMO.
+     * 
+     * @return true if so, false otherwise
+     */
     private boolean checkForRequiredMethod() {
    
         // Reflection!
         try {            
             Method m = PartyManager.class.getMethod("disbandParty", new Class[]{Party.class});
             Method n = UserManager.class.getMethod("getPlayer", new Class[]{OfflinePlayer.class});
+            Method o = LocaleLoader.class.getMethod("getCurrentLocale");
             return ((m != null) && (n != null));
         } catch (Exception e) {
             // doesn't matter
@@ -83,16 +100,32 @@ public class PartyAdmin extends JavaPlugin {
         return false;
     }
 
-    public boolean isMcmmoAvailable() {
+    /**
+     * Checks to see if mcMMO is loaded on the server. This is a somewhat redundant check, as Bukkit will
+     * do that for us, but it also provides the plugin object.
+     * 
+     * @return true if it is.
+     */
+    private boolean isMcmmoAvailable() {
         // Checking for mcMMO, just in case
-        Plugin _plugin = this.getServer().getPluginManager().getPlugin("mcMMO");
+        Plugin plugin = this.getServer().getPluginManager().getPlugin("mcMMO");
 
         //If we have found a plugin by the name of "mcMMO", check if it is actually
         //mcMMO. If not, or if we didn't find it, then it's not loaded in.
-        if (_plugin == null || !(_plugin instanceof mcMMO)) {
+        if (plugin == null || !(plugin instanceof mcMMO)) {
             return false; //Nope, it's not loaded.
         }
-        mcmmo = (mcMMO) _plugin;
+        mcmmo = (mcMMO) plugin;
         return true;
     }
+    
+    /**
+     * Returns the Party Spy base class
+     * 
+     * @return PartySpy class
+     */
+    public PartySpy getPartySpyHandler() {
+        return ps;
+    }
+
 }

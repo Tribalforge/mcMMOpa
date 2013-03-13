@@ -4,7 +4,7 @@
 
     <groupId>uk.co.drnaylor.mcmmopartyadmin</groupId>
     <artifactId>mcmmoPartyAdmin</artifactId>
-    <version>0.4.1-SNAPSHOT (1.4.00+ compat)</version>
+    <version>0.5.0-SNAPSHOT (1.4.00+ compat)</version>
     <packaging>jar</packaging>
 
     <name>mcmmoPartyAdmin</name>
@@ -40,6 +40,25 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+          <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources/</directory>
+                <includes>
+                    <include>*.yml</include>
+                    <include>.jenkins</include>
+                </includes>
+            </resource>
+            <resource>
+                <targetPath>uk/co/drnaylor/mcmmopartyadmin/locales</targetPath>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources/locales/</directory>
+                <includes>
+                    <include>messages*.properties</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 
 
