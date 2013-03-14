@@ -49,7 +49,13 @@ public class PartyAdminCommand implements CommandExecutor {
         if (player == null || PermissionHandler.isAdmin(player)) {
 
             if (args.length > 2 && (args[0].equalsIgnoreCase("pc") || args[0].equalsIgnoreCase("chat"))) {
-                partyChat(sender, args);
+                StringBuilder a = new StringBuilder();
+                
+                for (int i = 2; i < args.length; i++) {
+                    a.append(args[i]);
+                }
+                
+                partyChat(sender, args[1], a.toString());
                 return true;
             }
 
@@ -81,7 +87,7 @@ public class PartyAdminCommand implements CommandExecutor {
                         changePartyOwner(sender, args[1], args[2]);
                         return true;
                     } else if ((args[0].equalsIgnoreCase("pc") || args[0].equalsIgnoreCase("chat"))) {
-                            partyChat(sender, args);
+                        partyChat(sender, args[1], args[2]);
                     } else {
                         listCommands(sender);
                         return true;
@@ -250,7 +256,13 @@ public class PartyAdminCommand implements CommandExecutor {
         }
     }
     
-    
+    /**
+     * Change the owner of a party.
+     * 
+     * @param sender Player requesting the change
+     * @param player Player to make the owner
+     * @param partyName Party to make them the owner of
+     */
     private void changePartyOwner(CommandSender sender, String player, String partyName) {
         OfflinePlayer targetPlayer = PartyAdmin.plugin.getServer().getOfflinePlayer(player);
 
@@ -275,36 +287,26 @@ public class PartyAdminCommand implements CommandExecutor {
     /**
      * Send a message to the specified party.
      * 
-     * @param sender
+     * @param sender Player sending the message
      * @param args 
      */
-    private void partyChat(CommandSender sender, String[] args) {
-        if (Util.getPartyFromList(args[1]) == null) {
-            sender.sendMessage(L10n.getString("Party.DoesNotExist",args[1]));
+    private void partyChat(CommandSender sender, String party, String message) {
+        if (Util.getPartyFromList(party) == null) {
+            sender.sendMessage(L10n.getString("Party.DoesNotExist",party));
             return;
         }
-
-        StringBuilder buffer = new StringBuilder();
-        buffer.append(args[2]);
-
-        for (int i = 3; i < args.length; i++) {
-            buffer.append(" ");
-            buffer.append(args[i]);
-        }
-
-        String message = buffer.toString();
         
         if (!(sender instanceof Player)) {
-            ChatAPI.sendPartyChat(PartyAdmin.plugin,L10n.getString("Console.Name"), args[1], message);
+            ChatAPI.sendPartyChat(PartyAdmin.plugin,L10n.getString("Console.Name"), party, message);
         } else {
-            ChatAPI.sendPartyChat(PartyAdmin.plugin,sender.getName(), args[1], message);
+            ChatAPI.sendPartyChat(PartyAdmin.plugin,sender.getName(), party, message);
         }
         
         if (sender instanceof Player) {
             Player send = (Player) sender;
             if (!PartyAdmin.plugin.getPartySpyHandler().isSpy(send)) {
                 sender.sendMessage(L10n.getString("PartySpy.Off"));
-                String p2 = ChatColor.GRAY + "[" + args[1] + "] " + ChatColor.GREEN + " (" + ChatColor.WHITE + sender.getName() + ChatColor.GREEN + ") ";
+                String p2 = ChatColor.GRAY + "[" + party + "] " + ChatColor.GREEN + " (" + ChatColor.WHITE + sender.getName() + ChatColor.GREEN + ") ";
                 sender.sendMessage(p2 + message); 
             }
         } 
@@ -316,7 +318,7 @@ public class PartyAdminCommand implements CommandExecutor {
      * @param player CommandSender to send the messages to.
      */
     private void listCommands(CommandSender player) {
-        player.sendMessage(ChatColor.DARK_AQUA + "mcMMO Party Admin v" + PartyAdmin.plugin.getDescription().getVersion());
+        player.sendMessage(ChatColor.DARK_AQUA + "mcMMO Party Admin v" + PartyAdmin.plugin.getDescription().getVersion()); //No need to localise this line
         player.sendMessage(ChatColor.DARK_AQUA + "=================");
         player.sendMessage(ChatColor.YELLOW + "/partyadmin list " + ChatColor.WHITE + "- " + L10n.getString("Description.List"));
         player.sendMessage(ChatColor.YELLOW + "/partyadmin rp <party> " + ChatColor.WHITE + "- " + L10n.getString("Description.Disband"));
