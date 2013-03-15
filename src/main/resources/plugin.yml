@@ -8,9 +8,12 @@ commands:
         description: Administrate parties
         permission: mcmmopartyadmin.commands.partyadmin
         permission-message: You don't have permission to perform that command
+    fixparties:
+        description: Fix parties
+        permission: mcmmopartyadmin.commands.partyadmin
+        permission-message: You don't have permission to perform that command
     partyspy:
         description: Toggle party spy
-        permission: mcmmopartyadmin.spy
         permission-message: You don't have permission to perform that command
 permissions:
     mcmmopartyadmin.commands.partyadmin:

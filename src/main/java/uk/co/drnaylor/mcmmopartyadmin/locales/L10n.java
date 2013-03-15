@@ -21,6 +21,7 @@
 package uk.co.drnaylor.mcmmopartyadmin.locales;
 
 import com.gmail.nossr50.locale.LocaleLoader;
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -59,6 +60,21 @@ public final class L10n {
                 return '!' + key + '!';
             }
         }
+    }
+    
+    
+    private static String getString(String key, ResourceBundle bundle, Object... messageArguments) throws MissingResourceException {
+        String output = bundle.getString(key);
+
+        if (messageArguments != null) {
+            MessageFormat formatter = new MessageFormat("");
+            formatter.applyPattern(output);
+            output = formatter.format(messageArguments);
+        }
+
+        output = addColours(output);
+
+        return output;
     }
     
     /**

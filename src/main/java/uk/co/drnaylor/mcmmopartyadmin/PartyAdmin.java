@@ -33,6 +33,8 @@ import java.lang.reflect.Method;
 import java.util.logging.Level;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
+import uk.co.drnaylor.mcmmopartyadmin.commands.FixPartiesCommand;
+import uk.co.drnaylor.mcmmopartyadmin.locales.L10n;
 
 public class PartyAdmin extends JavaPlugin {
 
@@ -47,20 +49,20 @@ public class PartyAdmin extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         if (!isMcmmoAvailable()) {
-            this.getServer().getLogger().severe("mcMMO is not loaded on the server.");
+            this.getServer().getLogger().severe(L10n.getString("Enable.NotFound"));
             this.getPluginLoader().disablePlugin(this);
             return;
         }
-        this.getServer().getLogger().info("[mcMMO Party Admin] mcMMO hooked.");
+        this.getServer().getLogger().info(L10n.getString("Enable.Hooked"));
 
-        this.getServer().getLogger().info("[mcMMO Party Admin] Checking to see if mcMMO 1.4+ is installed...");
+        this.getServer().getLogger().info(L10n.getString("Enable.Checking"));
         
         if (!checkForRequiredMethod()) {
-            this.getServer().getLogger().severe("[mcMMO Party Admin] mcMMO 1.4 is NOT installed. Disabling.");
+            this.getServer().getLogger().severe(L10n.getString("Enable.CheckFailed"));
             this.getPluginLoader().disablePlugin(this);
             return;
         }
-        this.getServer().getLogger().info("[mcMMO Party Admin] mcMMO 1.4 has been detected.");
+        this.getServer().getLogger().info(L10n.getString("Enable.CheckSucceeded"));
         pa = new PartyChangeListener();
         pc = new PartyChatListener();
 
@@ -69,16 +71,17 @@ public class PartyAdmin extends JavaPlugin {
 
         getCommand("pa").setExecutor(new PartyAdminCommand());
         getCommand("partyspy").setExecutor(new PartySpyCommand());
+        getCommand("fixparties").setExecutor(new FixPartiesCommand());
         
         this.reloadConfig();
         ps = new PartySpy(plugin.getConfig().getStringList("partyspy"));
         
-        this.getServer().getLogger().log(Level.INFO, "[mcMMO Party Admin] mcMMO Party Admin {0} is now enabled.", this.getDescription().getVersion());
+        this.getServer().getLogger().log(Level.INFO, L10n.getString("Enable.CheckSucceeded", this.getDescription().getVersion()));
     }
 
     @Override
     public void onDisable() {
-        this.getServer().getLogger().info("mcMMO Party Admin is now disabled.");
+        this.getServer().getLogger().info(L10n.getString("Disable.Complete", this.getDescription().getVersion()));
     }
 
     /**
@@ -93,7 +96,7 @@ public class PartyAdmin extends JavaPlugin {
             Method m = PartyManager.class.getMethod("disbandParty", new Class[]{Party.class});
             Method n = UserManager.class.getMethod("getPlayer", new Class[]{OfflinePlayer.class});
             Method o = LocaleLoader.class.getMethod("getCurrentLocale");
-            return ((m != null) && (n != null));
+            return ((m != null) && (n != null) && (o != null));
         } catch (Exception e) {
             // doesn't matter
         }

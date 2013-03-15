@@ -7,9 +7,13 @@ Party Admin tool for mcMMO
 
 mcMMO Party Admin is a plugin that snaps into mcMMO’s party system. Using this plugin, and thanks to mcMMO’s API, Admins can now spy on party chat, remove parties, and move players between different parties. Admins can also chat to parties they are not part of themselves.
 
+mcMMO has also been known to duplicate player entries in the party table. A ````/fixparties```` command has been added to alliviate this as of the v0.5 snapshots, which checks for and removes duplicate player entries from the party lists.
+
 ## Plugin Information
 
-This plugin is licensed under the MIT license. Basically, do as you will, just leave my copyright notices intact!
+This plugin is licensed under the GPLv3 license. Basically, you are free to use and modify it, but your source code must be published with any derivative works under the same license.
+
+This license is used as this plugin has used code from the base mcMMO plugin, which is GPLv3 in itself.
 
 #### To function, this plugin requires:
 
@@ -54,8 +58,13 @@ Toggles Party Spy on or off (Note that PartySpy defaults to OFF, and players MUS
 * ````/partyspy save```` – Requires ````mcmmopartyadmin.admin```` – Force save the spyers file.
 * ````/partyspy reload```` – Requires ````mcmmopartyadmin.admin```` – Reloads the spyers file from disc.
 
+#### /fixparties
+<small>Requires ````mcmmopartyadmin.commands.partyadmin````.</small>
+
+Removes any duplicate players in the party lists.
+
 ## More Information
 
 See http://plugins.tribalforge.co.uk/mcmmo-party-admin/ for more information and binary downloads.
 
-Please note that this software is in development, and I hope to make it completely dependant on the mcMMO API before hitting the big 1.0. This plugin uses reflection to ensure the required methods are there, and will disable if it detects they are not.
+Please note that this software is in active development, and I hope to make it completely dependant on the mcMMO API before hitting the big 1.0. This plugin uses reflection to ensure the required methods are there, and will disable if it detects they are not.
