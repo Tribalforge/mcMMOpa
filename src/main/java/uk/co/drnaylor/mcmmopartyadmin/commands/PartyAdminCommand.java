@@ -53,6 +53,9 @@ public class PartyAdminCommand implements CommandExecutor {
                 
                 for (int i = 2; i < args.length; i++) {
                     a.append(args[i]);
+                    if (i != args.length - 1) {
+                        a.append(" ");
+                    }
                 }
                 
                 partyChat(sender, args[1], a.toString());
