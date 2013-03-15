@@ -32,14 +32,13 @@ There are currently no configuation options.
 
 ## Permissions
 
-* ````mcmmopartyadmin.commands.partyadmin```` – Allows player to use the party admin commands
 * ````mcmmopartyadmin.admin```` – Allows player to use server admin functions
 * ````mcmmopartyadmin.spy```` – Allows player to spy on party chat
 
 ## Usage
 
 #### /partyadmin
-<small>Requires ````mcmmopartyadmin.commands.partyadmin```` - Alias /pa.</small>
+<small>Requires ````mcmmopartyadmin.admin```` - Alias /pa.</small>
 
 Accesses the Party Admin commands:
 
