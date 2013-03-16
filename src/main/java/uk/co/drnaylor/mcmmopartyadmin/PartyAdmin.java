@@ -76,7 +76,7 @@ public class PartyAdmin extends JavaPlugin {
         this.reloadConfig();
         ps = new PartySpy(plugin.getConfig().getStringList("partyspy"));
         
-        this.getServer().getLogger().log(Level.INFO, L10n.getString("Enable.CheckSucceeded", this.getDescription().getVersion()));
+        this.getServer().getLogger().log(Level.INFO, L10n.getString("Enable.Complete", this.getDescription().getVersion()));
     }
 
     @Override
