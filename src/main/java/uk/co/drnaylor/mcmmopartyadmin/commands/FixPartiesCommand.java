@@ -56,7 +56,13 @@ public class FixPartiesCommand implements CommandExecutor {
             for (OfflinePlayer player : pl) {
                 // If player is online and not put into the playermap yet
                 if (player.isOnline() && !playermap.containsKey(player)) {
-                    Party a = Util.getPartyFromList(PartyAPI.getPartyName(player.getPlayer()));
+                    Party a;
+                    if (PartyAPI.inParty(player.getPlayer())) {
+                      a = Util.getPartyFromList(PartyAPI.getPartyName(player.getPlayer()));
+                    } else {
+                      a = null;
+                    }
+                    
                     if (a != p) { // Not in the party we are checking
                         p.getMembers().remove(player);
                     } else { // We are in the party. We can make all checks as normal after this one.
