@@ -26,20 +26,36 @@ import com.gmail.nossr50.datatypes.player.McMMOPlayer;
 import com.gmail.nossr50.events.party.McMMOPartyChangeEvent;
 import com.gmail.nossr50.party.PartyManager;
 import com.gmail.nossr50.util.player.UserManager;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import uk.co.drnaylor.mcmmopartyadmin.PartyAdmin;
 import uk.co.drnaylor.mcmmopartyadmin.Util;
 import uk.co.drnaylor.mcmmopartyadmin.locales.L10n;
 import uk.co.drnaylor.mcmmopartyadmin.permissions.PermissionHandler;
 
-public class PartyAdminCommand implements CommandExecutor {
-   
+public class PartyAdminCommand implements TabExecutor {
+
+    private final String[] commands = {"apl", "chown", "rpl", "rp", "pc"};
+    private final String[] addplayer = {"addplayer", "apl"};
+    private final String[] changeowner = {"chown", "changeowner"};
+    private final String[] removeplayer = {"removeplayer", "kickplayer", "rpl"};
+    private final String[] removeparty = {"removeparty", "remparty", "delparty", "rp"};
+    private final String[] chat = {"chat", "pc"};
+    
+    private HashMap<CommandSender,List<String>> auto;
+
+    public PartyAdminCommand() {
+        this.auto = new HashMap<CommandSender,List<String>>();
+    }
+
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = null;
         if (sender instanceof Player) {
@@ -50,14 +66,14 @@ public class PartyAdminCommand implements CommandExecutor {
 
             if (args.length > 2 && (args[0].equalsIgnoreCase("pc") || args[0].equalsIgnoreCase("chat"))) {
                 StringBuilder a = new StringBuilder();
-                
+
                 for (int i = 2; i < args.length; i++) {
                     a.append(args[i]);
                     if (i != args.length - 1) {
                         a.append(" ");
                     }
                 }
-                
+
                 partyChat(sender, args[1], a.toString());
                 return true;
             }
@@ -106,11 +122,75 @@ public class PartyAdminCommand implements CommandExecutor {
 
         return true;
     }
-    
-    
+
+    /**
+     * Suggests tab completions, replacing players with parties
+     *
+     * @param sender
+     * @param command
+     * @param alias
+     * @param args
+     * @return
+     */
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+
+        switch (args.length) {
+            case 1:
+                return Arrays.asList(commands);
+            case 2:
+                if ((Arrays.asList(removeparty).contains(args[0])) || (Arrays.asList(chat).contains(args[0]))) {
+                    List<String> collection = Util.getPartyCollection();
+                    
+                    if (args[1].isEmpty()) {
+                        return collection;   
+                    }
+                        
+                    if (collection.contains(args[1]) && auto.get(sender) != null) {
+                        return auto.get(sender);
+                    }
+                    
+                    auto.remove(sender);
+                    List<String> c = new ArrayList<String>();
+                    for (String s : collection) {
+                        if (s.toLowerCase().startsWith(args[1].toLowerCase())) {
+                            c.add(s);
+                        }
+                    }
+                    auto.put(sender,c);
+                    return c;
+                }
+                return null;
+            case 3:
+                if ((Arrays.asList(addplayer).contains(args[0])) || (Arrays.asList(changeowner).contains(args[0]))) {
+                    List<String> collection = Util.getPartyCollection();
+                    
+                    if (args[2].isEmpty()) {
+                        return collection;   
+                    }
+                    
+                    if (collection.contains(args[2]) && auto.get(sender) != null) {
+                        return auto.get(sender);
+                    }
+                    
+                    auto.remove(sender);
+                    List<String> c = new ArrayList<String>();
+                    for (String s : collection) {
+                        if (s.toLowerCase().startsWith(args[2].toLowerCase())) {
+                            c.add(s);
+                        }
+                    }
+                    auto.put(sender,c);
+                    return c;
+                }
+                return null;
+            default:
+                return null;
+        }
+    }
+
     /**
      * Sends a list of all parties and it's members to the requester.
-     * 
+     *
      * @param sender Requester to send the list to.
      */
     private void listParties(CommandSender sender) {
@@ -126,7 +206,7 @@ public class PartyAdminCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.DARK_AQUA + "===============");
 
             // This next bit has no need for localisation
-            
+
             // Over each party...
             for (Party a : parties) {
 
@@ -162,10 +242,10 @@ public class PartyAdminCommand implements CommandExecutor {
             }
         }
     }
-    
+
     /**
      * Disbands an mcMMO party.
-     * 
+     *
      * @param sender Player or console who requested the disband
      * @param party Party to disband
      */
@@ -193,17 +273,16 @@ public class PartyAdminCommand implements CommandExecutor {
 
         sender.sendMessage(L10n.getString("Commands.Disband.Success", party));
     }
-    
-    
+
     /**
      * Removes a player from their party.
-     * 
+     *
      * @param sender Player requesting removal
      * @param player Name of player to remove
      */
     private void removePlayerFromParty(CommandSender sender, String player) {
         Player targetPlayer = PartyAdmin.plugin.getServer().getPlayer(player);
-                        
+
         // If the player is online
         if (targetPlayer != null) {
             // Is the player in a party?
@@ -222,10 +301,10 @@ public class PartyAdminCommand implements CommandExecutor {
             sender.sendMessage(L10n.getString("Player.NotOnline", player));
         }
     }
-    
+
     /**
      * Adds a player to a party.
-     * 
+     *
      * @param sender Player requesting the addition
      * @param player Player to add to party
      * @param partyName Party to add player to
@@ -244,7 +323,7 @@ public class PartyAdminCommand implements CommandExecutor {
             sender.sendMessage(L10n.getString("Player.NotOnline", player));
             return;
         }
-        
+
         if (PartyAPI.inParty(targetPlayer)) {
             PartyAPI.removeFromParty(targetPlayer);
         }
@@ -258,10 +337,10 @@ public class PartyAdminCommand implements CommandExecutor {
             sender.sendMessage(L10n.getString("Commands.Added.Failed", targetPlayer.getName(), partyName));
         }
     }
-    
+
     /**
      * Change the owner of a party.
-     * 
+     *
      * @param sender Player requesting the change
      * @param player Player to make the owner
      * @param partyName Party to make them the owner of
@@ -285,38 +364,38 @@ public class PartyAdminCommand implements CommandExecutor {
             sender.sendMessage(L10n.getString("Commands.ChangeOwner.NotInParty", player, partyName));
         }
     }
-    
+
     /**
      * Send a message to the specified party.
-     * 
+     *
      * @param sender Player sending the message
-     * @param args 
+     * @param args
      */
     private void partyChat(CommandSender sender, String party, String message) {
         if (Util.getPartyFromList(party) == null) {
-            sender.sendMessage(L10n.getString("Party.DoesNotExist",party));
+            sender.sendMessage(L10n.getString("Party.DoesNotExist", party));
             return;
         }
-        
+
         if (!(sender instanceof Player)) {
-            ChatAPI.sendPartyChat(PartyAdmin.plugin,L10n.getString("Console.Name"), party, message);
+            ChatAPI.sendPartyChat(PartyAdmin.plugin, L10n.getString("Console.Name"), party, message);
         } else {
-            ChatAPI.sendPartyChat(PartyAdmin.plugin,((Player)sender).getDisplayName(), party, message);
+            ChatAPI.sendPartyChat(PartyAdmin.plugin, ((Player) sender).getDisplayName(), party, message);
         }
-        
+
         if (sender instanceof Player) {
             Player send = (Player) sender;
             if (!PartyAdmin.plugin.getPartySpyHandler().isSpy(send)) {
                 sender.sendMessage(L10n.getString("PartySpy.Off"));
-                String p2 = ChatColor.GRAY + "[" + party + "] " + ChatColor.GREEN + " (" + ChatColor.WHITE + ((Player)sender).getDisplayName() + ChatColor.GREEN + ") ";
-                sender.sendMessage(p2 + message); 
+                String p2 = ChatColor.GRAY + "[" + party + "] " + ChatColor.GREEN + " (" + ChatColor.WHITE + ((Player) sender).getDisplayName() + ChatColor.GREEN + ") ";
+                sender.sendMessage(p2 + message);
             }
-        } 
+        }
     }
 
     /**
      * Send a list of the permissible commands to the sender.
-     * 
+     *
      * @param player CommandSender to send the messages to.
      */
     private void listCommands(CommandSender player) {

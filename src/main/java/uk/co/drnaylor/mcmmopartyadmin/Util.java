@@ -21,6 +21,8 @@ package uk.co.drnaylor.mcmmopartyadmin;
 
 import com.gmail.nossr50.api.PartyAPI;
 import com.gmail.nossr50.datatypes.party.Party;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Util {
@@ -38,5 +40,20 @@ public class Util {
             }
         }
         return null;
+    }
+    
+    /**
+     * Returns a string list of available parties.
+     * 
+     * @return Collection of party names
+     */
+    public static ArrayList<String> getPartyCollection() {
+        ArrayList<String> a = new ArrayList<String>();
+        List<Party> parties = PartyAPI.getParties();
+        for (Party p : parties) {
+            a.add(p.getName());
+        }
+        java.util.Collections.sort(a);
+        return a;
     }
 }
