@@ -43,7 +43,7 @@ import uk.co.drnaylor.mcmmopartyadmin.permissions.PermissionHandler;
 
 public class PartyAdminCommand implements TabExecutor {
 
-    private final String[] commands = {"apl", "chown", "rpl", "rp", "pc"};
+    private final String[] commands = {"apl", "chown", "pc", "rp", "rpl"};
     private final String[] addplayer = {"addplayer", "apl"};
     private final String[] changeowner = {"chown", "changeowner"};
     private final String[] removeplayer = {"removeplayer", "kickplayer", "rpl"};
@@ -64,7 +64,7 @@ public class PartyAdminCommand implements TabExecutor {
 
         if (player == null || PermissionHandler.isAdmin(player)) {
 
-            if (args.length > 2 && (args[0].equalsIgnoreCase("pc") || args[0].equalsIgnoreCase("chat"))) {
+            if (args.length > 2 && (Arrays.asList(chat).contains(args[0]))) {
                 StringBuilder a = new StringBuilder();
 
                 for (int i = 2; i < args.length; i++) {
@@ -124,7 +124,7 @@ public class PartyAdminCommand implements TabExecutor {
     }
 
     /**
-     * Suggests tab completions, replacing players with parties
+     * Suggests tab completions, replacing players with parties.
      *
      * @param sender
      * @param command
@@ -135,29 +135,29 @@ public class PartyAdminCommand implements TabExecutor {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
         switch (args.length) {
-            case 1:
+            case 1: // If we have no arguments to the command yet
                 return Arrays.asList(commands);
-            case 2:
+            case 2: 
                 if ((Arrays.asList(removeparty).contains(args[0])) || (Arrays.asList(chat).contains(args[0]))) {
-                    List<String> collection = Util.getPartyCollection();
+                    List<String> collection = Util.getPartyCollection(); // Get the list of parties
                     
                     if (args[1].isEmpty()) {
-                        return collection;   
+                        return collection; // If we haven't started typing a party name yet, return the whole list
                     }
                         
                     if (collection.contains(args[1]) && auto.get(sender) != null) {
-                        return auto.get(sender);
+                        return auto.get(sender); // If it seems that we have tabbed before, and not got the right party, just continue
                     }
                     
-                    auto.remove(sender);
+                    auto.remove(sender); // Otherwise, if the argument is user altered, then remove the previous list, and build a new one
                     List<String> c = new ArrayList<String>();
                     for (String s : collection) {
-                        if (s.toLowerCase().startsWith(args[1].toLowerCase())) {
+                        if (s.toLowerCase().startsWith(args[1].toLowerCase())) { // Check to see if the substring is contained in any parties
                             c.add(s);
                         }
                     }
-                    auto.put(sender,c);
-                    return c;
+                    auto.put(sender,c); // Store the list for if we "double tab"
+                    return c; // Return this list
                 }
                 return null;
             case 3:
