@@ -41,7 +41,7 @@ public class PartyChatListener implements Listener {
                 if (!PartyAPI.inParty(online) || !(PartyAPI.getPartyName(online).equals(event.getParty()))) {
                     
                     // Spy not in the party, so we spy!
-                    String p2 = L10n.getString("PartySpy.message", event.getParty(), event.getSender(), event.getMessage());
+                    String p2 = L10n.getString("PartySpy.message", event.getParty(), event.getDisplayName(), event.getMessage());
                     online.sendMessage(p2);
 
                 }
