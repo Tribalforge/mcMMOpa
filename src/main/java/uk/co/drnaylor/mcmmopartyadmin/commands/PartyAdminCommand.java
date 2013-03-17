@@ -87,10 +87,10 @@ public class PartyAdminCommand implements TabExecutor {
                     listCommands(sender);
                     return true;
                 case 2:
-                    if (args[0].equalsIgnoreCase("removeparty") || args[0].equalsIgnoreCase("remparty") || args[0].equalsIgnoreCase("delparty") || args[0].equalsIgnoreCase("rp")) {
+                    if (Arrays.asList(removeparty).contains(args[0])) {
                         disbandParty(sender, args[1]);
                         return true;
-                    } else if (args[0].equalsIgnoreCase("removeplayer") || args[0].equalsIgnoreCase("rpl") || args[0].equalsIgnoreCase("kickplayer")) {
+                    } else if (Arrays.asList(removeplayer).contains(args[0])) {
                         removePlayerFromParty(sender, args[1]);
                         return true;
                     } else {
@@ -99,13 +99,13 @@ public class PartyAdminCommand implements TabExecutor {
                     }
 
                 case 3:
-                    if (args[0].equalsIgnoreCase("addplayer") || args[0].equalsIgnoreCase("apl")) {
+                    if (Arrays.asList(addplayer).contains(args[0])) {
                         addPlayerToParty(sender, args[1], args[2]);
                         return true;
-                    } else if (args[0].equalsIgnoreCase("changeowner") || args[0].equalsIgnoreCase("chown")) {
+                    } else if (Arrays.asList(changeowner).contains(args[0])) {
                         changePartyOwner(sender, args[1], args[2]);
                         return true;
-                    } else if ((args[0].equalsIgnoreCase("pc") || args[0].equalsIgnoreCase("chat"))) {
+                    } else if (Arrays.asList(chat).contains(args[0])) {
                         partyChat(sender, args[1], args[2]);
                     } else {
                         listCommands(sender);
