@@ -280,10 +280,9 @@ public class PartyAdminCommand implements CommandExecutor {
 
         if (party.getName().equals(partyName)) {
             PartyAPI.setPartyLeader(partyName, targetPlayer.getName());
-            sender.sendMessage(L10n.getString("Commands.ChangeOwner.Success", player, party));
-            sender.sendMessage(L10n.getString("Commands.ChangeOwner.Owner", player, party));
+            sender.sendMessage(L10n.getString("Commands.ChangeOwner.Success", player, partyName));
         } else {
-            sender.sendMessage(L10n.getString("Commands.ChangeOwner.NotInParty", player, party));
+            sender.sendMessage(L10n.getString("Commands.ChangeOwner.NotInParty", player, partyName));
         }
     }
     
@@ -302,14 +301,14 @@ public class PartyAdminCommand implements CommandExecutor {
         if (!(sender instanceof Player)) {
             ChatAPI.sendPartyChat(PartyAdmin.plugin,L10n.getString("Console.Name"), party, message);
         } else {
-            ChatAPI.sendPartyChat(PartyAdmin.plugin,sender.getName(), party, message);
+            ChatAPI.sendPartyChat(PartyAdmin.plugin,((Player)sender).getDisplayName(), party, message);
         }
         
         if (sender instanceof Player) {
             Player send = (Player) sender;
             if (!PartyAdmin.plugin.getPartySpyHandler().isSpy(send)) {
                 sender.sendMessage(L10n.getString("PartySpy.Off"));
-                String p2 = ChatColor.GRAY + "[" + party + "] " + ChatColor.GREEN + " (" + ChatColor.WHITE + sender.getName() + ChatColor.GREEN + ") ";
+                String p2 = ChatColor.GRAY + "[" + party + "] " + ChatColor.GREEN + " (" + ChatColor.WHITE + ((Player)sender).getDisplayName() + ChatColor.GREEN + ") ";
                 sender.sendMessage(p2 + message); 
             }
         } 
