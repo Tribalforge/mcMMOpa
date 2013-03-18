@@ -77,8 +77,8 @@ public class PartySpy {
      * Reload the config file and get the list of players with PartySpy enabled.
      */
     public void reloadSpies() {
-        PartyAdmin.plugin.reloadConfig();
-        spies = PartyAdmin.plugin.getConfig().getStringList("partyspy");
+        PartyAdmin.getPlugin().reloadConfig();
+        spies = PartyAdmin.getPlugin().getConfig().getStringList("partyspy");
         saveList();
     }
     
@@ -86,7 +86,7 @@ public class PartySpy {
      * Update and save the config file.
      */
     public void saveList() {
-        PartyAdmin.plugin.getConfig().set("partyspy", spies);
-        PartyAdmin.plugin.saveConfig();
+        PartyAdmin.getPlugin().getConfig().set("partyspy", spies);
+        PartyAdmin.getPlugin().saveConfig();
     }
 }

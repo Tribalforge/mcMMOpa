@@ -89,7 +89,7 @@ public final class L10n {
         }
         catch (NoSuchMethodError e) {
             // Can't localise a message here, but as we know we are alling back to en_GB, it matters not.
-            PartyAdmin.plugin.getServer().getLogger().warning("[mcMMO Party Admin] Locale could not be detected. Falling back to en_GB");
+            PartyAdmin.getPlugin().getServer().getLogger().warning("[mcMMO Party Admin] Locale could not be detected. Falling back to en_GB");
             bundle = ResourceBundle.getBundle("uk.co.drnaylor.mcmmopartyadmin.locales.messages", Locale.UK);
         }
         enBundle = ResourceBundle.getBundle("uk.co.drnaylor.mcmmopartyadmin.locales.messages", Locale.UK);

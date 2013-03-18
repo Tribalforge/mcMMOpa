@@ -281,7 +281,7 @@ public class PartyAdminCommand implements TabExecutor {
      * @param player Name of player to remove
      */
     private void removePlayerFromParty(CommandSender sender, String player) {
-        Player targetPlayer = PartyAdmin.plugin.getServer().getPlayer(player);
+        Player targetPlayer = PartyAdmin.getPlugin().getServer().getPlayer(player);
 
         // If the player is online
         if (targetPlayer != null) {
@@ -311,7 +311,7 @@ public class PartyAdminCommand implements TabExecutor {
      */
     private void addPlayerToParty(CommandSender sender, String player, String partyName) {
         // Get the OfflinePlayer
-        Player targetPlayer = PartyAdmin.plugin.getServer().getPlayerExact(player);
+        Player targetPlayer = PartyAdmin.getPlugin().getServer().getPlayerExact(player);
 
         Party party = Util.getPartyFromList(partyName);
 
@@ -346,7 +346,7 @@ public class PartyAdminCommand implements TabExecutor {
      * @param partyName Party to make them the owner of
      */
     private void changePartyOwner(CommandSender sender, String player, String partyName) {
-        OfflinePlayer targetPlayer = PartyAdmin.plugin.getServer().getOfflinePlayer(player);
+        OfflinePlayer targetPlayer = PartyAdmin.getPlugin().getServer().getOfflinePlayer(player);
 
         if (targetPlayer == null) {
             // Player doesn't exist
@@ -378,14 +378,14 @@ public class PartyAdminCommand implements TabExecutor {
         }
 
         if (!(sender instanceof Player)) {
-            ChatAPI.sendPartyChat(PartyAdmin.plugin, L10n.getString("Console.Name"), party, message);
+            ChatAPI.sendPartyChat(PartyAdmin.getPlugin(), L10n.getString("Console.Name"), party, message);
         } else {
-            ChatAPI.sendPartyChat(PartyAdmin.plugin, ((Player) sender).getDisplayName(), party, message);
+            ChatAPI.sendPartyChat(PartyAdmin.getPlugin(), ((Player) sender).getDisplayName(), party, message);
         }
 
         if (sender instanceof Player) {
             Player send = (Player) sender;
-            if (!PartyAdmin.plugin.getPartySpyHandler().isSpy(send)) {
+            if (!PartyAdmin.getPlugin().getPartySpyHandler().isSpy(send)) {
                 sender.sendMessage(L10n.getString("PartySpy.Off"));
                 String p2 = ChatColor.GRAY + "[" + party + "] " + ChatColor.GREEN + " (" + ChatColor.WHITE + ((Player) sender).getDisplayName() + ChatColor.GREEN + ") ";
                 sender.sendMessage(p2 + message);
@@ -399,7 +399,7 @@ public class PartyAdminCommand implements TabExecutor {
      * @param player CommandSender to send the messages to.
      */
     private void listCommands(CommandSender player) {
-        player.sendMessage(ChatColor.DARK_AQUA + "mcMMO Party Admin v" + PartyAdmin.plugin.getDescription().getVersion()); //No need to localise this line
+        player.sendMessage(ChatColor.DARK_AQUA + "mcMMO Party Admin v" + PartyAdmin.getPlugin().getDescription().getVersion()); //No need to localise this line
         player.sendMessage(ChatColor.DARK_AQUA + "=================");
         player.sendMessage(ChatColor.YELLOW + "/partyadmin list " + ChatColor.WHITE + "- " + L10n.getString("Description.List"));
         player.sendMessage(ChatColor.YELLOW + "/partyadmin rp <party> " + ChatColor.WHITE + "- " + L10n.getString("Description.Disband"));

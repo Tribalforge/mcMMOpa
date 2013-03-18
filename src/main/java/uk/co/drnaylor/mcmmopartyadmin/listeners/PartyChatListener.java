@@ -32,10 +32,10 @@ public class PartyChatListener implements Listener {
     @EventHandler
     public void PartyChat(McMMOPartyChatEvent event) {
         // For each player online....
-        for (Player online : PartyAdmin.plugin.getServer().getOnlinePlayers()) {
+        for (Player online : PartyAdmin.getPlugin().getServer().getOnlinePlayers()) {
             
             // Are they a spy?
-            if (PartyAdmin.plugin.getPartySpyHandler().isSpy(online)) {
+            if (PartyAdmin.getPlugin().getPartySpyHandler().isSpy(online)) {
 
                 // Are they in the party?
                 if (!PartyAPI.inParty(online) || !(PartyAPI.getPartyName(online).equals(event.getParty()))) {

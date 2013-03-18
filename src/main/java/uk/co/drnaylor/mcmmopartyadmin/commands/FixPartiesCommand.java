@@ -75,7 +75,7 @@ public class FixPartiesCommand implements CommandExecutor {
 
                     if (playermap.get(player) == p) { // Duplication in the same party.
                         cs.sendMessage(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
-                        PartyAdmin.plugin.getLogger().info(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
+                        PartyAdmin.getPlugin().getLogger().info(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
                         p.getMembers().remove(p.getMembers().lastIndexOf(player)); // Remove an instance
                         continue;
                     }
@@ -87,7 +87,7 @@ public class FixPartiesCommand implements CommandExecutor {
                         playermap.put(player, p); // Add to player map a new
                     } else {
                         cs.sendMessage(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
-                        PartyAdmin.plugin.getLogger().info(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
+                        PartyAdmin.getPlugin().getLogger().info(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
                         p.getMembers().remove(player);
                         continue;
                     }

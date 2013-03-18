@@ -33,16 +33,16 @@ public class PartySpyCommand implements CommandExecutor {
     
     public boolean onCommand(CommandSender cs, Command cmnd, String string, String[] args) {
         switch (args.length) {
-            case 1:
+            case 0:
                 if (cs instanceof Player) {
                     Player player = (Player) cs;
                     if (PermissionHandler.canSpy(player)) {
                         
                         // Toggle Spy
-                        PartyAdmin.plugin.getPartySpyHandler().toggleSpy(player);
+                        PartyAdmin.getPlugin().getPartySpyHandler().toggleSpy(player);
                         
                         // Now send the correct message, based on whether they are now spying
-                        if (PartyAdmin.plugin.getPartySpyHandler().isSpy(player)) {
+                        if (PartyAdmin.getPlugin().getPartySpyHandler().isSpy(player)) {
                             cs.sendMessage(L10n.getString("Commands.PartySpy.on"));
                         } else {
                             cs.sendMessage(L10n.getString("Commands.PartySpy.off"));
@@ -56,17 +56,17 @@ public class PartySpyCommand implements CommandExecutor {
                     cs.sendMessage(L10n.getString("Commands.NoConsole"));
                 }
                 break;
-            case 0:
+            case 1:
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (!(cs instanceof Player) || PermissionHandler.isAdmin((Player)cs)) {
-                        PartyAdmin.plugin.getPartySpyHandler().reloadSpies();
+                        PartyAdmin.getPlugin().getPartySpyHandler().reloadSpies();
                     } else {
                         cs.sendMessage(L10n.getString("Commands.NoPermission"));
                     }
                     break;
                 } else if (args[0].equalsIgnoreCase("save")) {
                     if (!(cs instanceof Player) || PermissionHandler.isAdmin((Player)cs)) {
-                        PartyAdmin.plugin.getPartySpyHandler().saveList();
+                        PartyAdmin.getPlugin().getPartySpyHandler().saveList();
                     } else {
                         cs.sendMessage(L10n.getString("Commands.NoPermission"));
                     }

@@ -38,8 +38,8 @@ import uk.co.drnaylor.mcmmopartyadmin.locales.L10n;
 
 public class PartyAdmin extends JavaPlugin {
 
-    public static PartyAdmin plugin;
-    public static mcMMO mcmmo;
+    private static PartyAdmin plugin;
+    private static mcMMO mcmmo;
     private PartyChangeListener pa;
     private PartyChatListener pc;
     private PartySpy ps;
@@ -129,6 +129,22 @@ public class PartyAdmin extends JavaPlugin {
      */
     public PartySpy getPartySpyHandler() {
         return ps;
+    }
+    
+    /**
+     * Gets the plugin.
+     * @return The plugin.
+     */
+    public static PartyAdmin getPlugin() {
+        return plugin;
+    }
+    
+    /**
+     * Gets the mcmmo plugin.
+     * @return McMMO plugin
+     */
+    public static mcMMO getMcMMO() {
+        return mcmmo;
     }
 
 }

@@ -42,7 +42,7 @@ public class PartyChangeListener implements Listener {
             newp = "No party";
         }
 
-        for (Player online : PartyAdmin.plugin.getServer().getOnlinePlayers()) {
+        for (Player online : PartyAdmin.getPlugin().getServer().getOnlinePlayers()) {
             if (PermissionHandler.canSpy(online)) {
                 String p2 = L10n.getString("PartyChange.change",event.getPlayer().getName(), oldp, newp);
                 online.sendMessage(p2);
