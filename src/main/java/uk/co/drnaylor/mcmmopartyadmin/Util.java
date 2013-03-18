@@ -22,7 +22,6 @@ package uk.co.drnaylor.mcmmopartyadmin;
 import com.gmail.nossr50.api.PartyAPI;
 import com.gmail.nossr50.datatypes.party.Party;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class Util {

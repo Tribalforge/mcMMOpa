@@ -74,7 +74,7 @@ public class PartySpyCommand implements CommandExecutor {
                 }
             // Fallthrough
             default:
-                cs.sendMessage("Commands.IncorrectUse");
+                cs.sendMessage(L10n.getString("Commands.IncorrectUse"));
                 break;
         }
         return true;
