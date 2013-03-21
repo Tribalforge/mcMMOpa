@@ -43,7 +43,9 @@ public class FixPartiesCommand implements CommandExecutor {
          * 2) Player has permission
          */
 
-        /* This requires hooking into mcMMO 1.4 internals */
+        /* This requires hooking into mcMMO 1.4 internals and as such may break with an update 
+         * Works with 1.4-1.4.03         
+         */
 
         // Avoiding concurrent modifcation exceptions
         List<Party> parties = new ArrayList<Party>(PartyAPI.getParties());
@@ -55,7 +57,14 @@ public class FixPartiesCommand implements CommandExecutor {
 
             for (OfflinePlayer player : pl) {
                 // If player is online and not put into the playermap yet
-                if (player.isOnline() && !playermap.containsKey(player)) {
+                if (player.isOnline()) {
+                    if (playermap.containsKey(player)) {
+                        cs.sendMessage(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
+                        PartyAdmin.getPlugin().getLogger().info(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
+                        p.getMembers().remove(player); // Player is alread registered, so remove this entry
+                        continue;
+                    }
+                    
                     Party a;
                     if (PartyAPI.inParty(player.getPlayer())) {
                       a = Util.getPartyFromList(PartyAPI.getPartyName(player.getPlayer()));
@@ -64,6 +73,8 @@ public class FixPartiesCommand implements CommandExecutor {
                     }
                     
                     if (a != p) { // Not in the party we are checking
+                        cs.sendMessage(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
+                        PartyAdmin.getPlugin().getLogger().info(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
                         p.getMembers().remove(player);
                     } else { // We are in the party. We can make all checks as normal after this one.
                         playermap.put(player, a);
