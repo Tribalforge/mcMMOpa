@@ -58,7 +58,7 @@ Toggles Party Spy on or off (Note that PartySpy defaults to OFF, and players MUS
 * ````/partyspy reload```` – Requires ````mcmmopartyadmin.admin```` – Reloads the spyers file from disc.
 
 #### /fixparties
-<small>Requires ````mcmmopartyadmin.commands.partyadmin````.</small>
+<small>Requires ````mcmmopartyadmin.admin````.</small>
 
 Removes any duplicate players in the party lists.
 
