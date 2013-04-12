@@ -291,8 +291,8 @@ public class PartyAdminCommand implements TabExecutor {
                 PartyAPI.removeFromParty(targetPlayer);
 
                 // Tell them, and the sender
-                targetPlayer.sendMessage(L10n.getString("Command.Kicked.ByAdmin"));
-                sender.sendMessage(L10n.getString("Command.Kicked.Success", targetPlayer.getName()));
+                targetPlayer.sendMessage(L10n.getString("Commands.Kicked.ByAdmin"));
+                sender.sendMessage(L10n.getString("Commands.Kicked.Success", targetPlayer.getName()));
             } else {
                 // Tell the sender that the can't do that!
                 sender.sendMessage(L10n.getString("Player.NotInParty", targetPlayer.getName()));

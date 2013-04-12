@@ -146,5 +146,4 @@ public class PartyAdmin extends JavaPlugin {
     public static mcMMO getMcMMO() {
         return mcmmo;
     }
-
 }
