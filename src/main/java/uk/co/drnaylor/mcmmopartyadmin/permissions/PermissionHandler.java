@@ -15,7 +15,8 @@ public abstract class PermissionHandler {
     }
     
     /**
-     * Checks if a player has Admin powers over this plugin
+     * Checks if a player has Admin powers over this plugin.
+     * 
      * @param player Player to check
      * @return true if so, false otherwise
      */
