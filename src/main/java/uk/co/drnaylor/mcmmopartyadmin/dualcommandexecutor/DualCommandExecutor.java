@@ -131,7 +131,7 @@ public abstract class DualCommandExecutor implements TabExecutor {
     @Override
     public final List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 1) {
-            return getAllSubcommands();
+            return getPrincipalSubcommands();
         }
         
         // Remove the other arguments before sending to the sub command.
@@ -203,6 +203,14 @@ public abstract class DualCommandExecutor implements TabExecutor {
         List<String> s = new LinkedList<String>();
         for (DualSubCommandInterface sc : subCommands.values()) {
             s.addAll(sc.getSubCommands());
+        }
+        return s;
+    }
+    
+    private List<String> getPrincipalSubcommands() {
+        List<String> s = new LinkedList<String>();
+        for (DualSubCommandInterface sc : subCommands.values()) {
+            s.add(sc.getSubCommands().get(0));
         }
         return s;
     }
