@@ -1,6 +1,8 @@
 package uk.co.drnaylor.mcmmopartyadmin.dualcommandexecutor;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +11,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import uk.co.drnaylor.mcmmopartyadmin.PartyAdmin;
 
 /**
  * Class that handles commands and dynamically registering sub commands for a command within 
@@ -131,18 +134,32 @@ public abstract class DualCommandExecutor implements TabExecutor {
     @Override
     public final List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 1) {
-            return getPrincipalSubcommands();
+            List<String> commands = getPrincipalSubcommands();
+            Collections.sort(commands);
+            return commands;
         }
         
         // Remove the other arguments before sending to the sub command.
         String[] subargs = args.clone();
         subargs = (String[]) ArrayUtils.remove(subargs, 0);
         try {
-            return getInstanceFromSubcommand(args[0]).onSubCommandTabComplete(sender, subargs);
+            // Get list to send
+            List<String> s = getInstanceFromSubcommand(args[0]).onSubCommandTabComplete(sender, subargs);
+            // If the user has a partial command, filter out those that don't match.
+            if (!"".equals(args[args.length - 1])) {
+                List<String> temp = new ArrayList<String>(s);
+                for (String t : temp) {
+                    if (!(t.startsWith(args[args.length - 1]))) {
+                        s.remove(t);
+                    }
+                }
+            }
+            Collections.sort(s);
+            return s;
         }
-        finally {
+        catch (Exception e) {
             return null;
-        }
+        } 
     }
 
     /**
