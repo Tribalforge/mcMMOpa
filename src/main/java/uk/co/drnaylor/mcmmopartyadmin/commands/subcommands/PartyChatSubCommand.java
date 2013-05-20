@@ -58,7 +58,7 @@ public class PartyChatSubCommand implements DualSubCommandInterface {
                     }
                 }
 
-                partyChat(sender, cmdargs[1], a.toString());
+                partyChat(sender, cmdargs[0], a.toString());
                 return;
             }
             sender.sendMessage(ChatColor.RED + "Invalid Usage!");
