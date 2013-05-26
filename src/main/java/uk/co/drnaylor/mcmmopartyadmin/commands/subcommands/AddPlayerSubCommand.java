@@ -41,7 +41,7 @@ public class AddPlayerSubCommand implements DualSubCommandInterface {
     }
     
     public List<String> getSubCommands() {
-        return Arrays.asList(new String[] { "addplayer", "apl" });
+        return Arrays.asList("addplayer", "apl");
     }
 
     public String getShortHelp() {

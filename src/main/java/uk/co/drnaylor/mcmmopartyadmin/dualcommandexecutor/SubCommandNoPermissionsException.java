@@ -4,8 +4,8 @@ import java.util.List;
 
 public class SubCommandNoPermissionsException extends Exception {
     
-	final String errorMessage; 
-    final List<String> permissions;
+	private final String errorMessage;
+    private final List<String> permissions;
 	
 	public SubCommandNoPermissionsException(String errorMessage, List<String> permissions) {
 		this.errorMessage = errorMessage;

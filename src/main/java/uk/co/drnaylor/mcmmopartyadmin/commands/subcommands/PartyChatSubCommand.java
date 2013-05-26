@@ -21,7 +21,7 @@ public class PartyChatSubCommand implements DualSubCommandInterface {
     }
 
     public List<String> getSubCommands() {
-        return Arrays.asList(new String[] {"chat", "pc"});
+        return Arrays.asList("chat", "pc");
     }
 
     public String getShortHelp() {

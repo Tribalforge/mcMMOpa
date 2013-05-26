@@ -220,9 +220,11 @@ public class DeprecatedPartyAdminCommand implements TabExecutor {
                 tempList.append(ChatColor.DARK_AQUA);
                 tempList.append(a.getName());
                 tempList.append(":");
-
+                
                 // Over all players
-                for (OfflinePlayer otherPlayerName : a.getMembers()) {
+                for (String pa : a.getMembers()) {
+                    OfflinePlayer otherPlayerName = PartyAdmin.getPlugin().getServer().getOfflinePlayer(pa);
+                    
                     tempList.append(" ");
                     if (leader.equals(otherPlayerName.getName())) {
                         // Leader in Gold

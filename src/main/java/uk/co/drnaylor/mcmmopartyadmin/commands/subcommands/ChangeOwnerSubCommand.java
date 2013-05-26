@@ -44,7 +44,7 @@ public class ChangeOwnerSubCommand implements DualSubCommandInterface {
     }
     
     public List<String> getSubCommands() {
-        return Arrays.asList(new String[] {"chown", "changeowner"});
+        return Arrays.asList("chown", "changeowner");
     }
 
     public String getShortHelp() {

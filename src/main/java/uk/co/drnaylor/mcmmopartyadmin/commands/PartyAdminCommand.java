@@ -35,6 +35,7 @@ import uk.co.drnaylor.mcmmopartyadmin.locales.L10n;
 public class PartyAdminCommand extends DualCommandExecutor {
 
     public PartyAdminCommand() {
+        super();
         // Register the sub commands
         try {
             this.RegisterSubCommand(new ListPartiesSubCommand());
@@ -70,7 +71,7 @@ public class PartyAdminCommand extends DualCommandExecutor {
             this.RegisterSubCommand(new PartyChatSubCommand());
         } catch (SubCommandException ex) {
             Logger.getLogger(PartyAdminCommand.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
     }
     
     @Override
@@ -78,7 +79,7 @@ public class PartyAdminCommand extends DualCommandExecutor {
         sender.sendMessage(ChatColor.DARK_AQUA + "mcMMO Party Admin v" + PartyAdmin.getPlugin().getDescription().getVersion()); //No need to localise this line
         sender.sendMessage(ChatColor.DARK_AQUA + "=================");
         for (DualSubCommandInterface iface : GetSubCommands()) {
-            sender.sendMessage(iface.getLongHelp());
+            sender.sendMessage(iface.getShortHelp());
         }
         return true;
     }

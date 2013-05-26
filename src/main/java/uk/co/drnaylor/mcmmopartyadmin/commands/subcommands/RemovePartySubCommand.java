@@ -22,7 +22,7 @@ public class RemovePartySubCommand implements DualSubCommandInterface {
     }
 
     public List<String> getSubCommands() {
-        return Arrays.asList(new String[] {"removeparty", "remparty", "delparty", "rp"});
+        return Arrays.asList("removeparty", "remparty", "delparty", "rp");
     }
 
     public String getShortHelp() {

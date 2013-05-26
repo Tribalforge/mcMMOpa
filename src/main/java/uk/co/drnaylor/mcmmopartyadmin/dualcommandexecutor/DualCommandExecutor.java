@@ -11,7 +11,6 @@ import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import uk.co.drnaylor.mcmmopartyadmin.PartyAdmin;
 
 /**
  * Class that handles commands and dynamically registering sub commands for a command within 
@@ -21,9 +20,9 @@ import uk.co.drnaylor.mcmmopartyadmin.PartyAdmin;
  */
 public abstract class DualCommandExecutor implements TabExecutor {
 
-    private Map<Class<? extends DualSubCommandInterface>, DualSubCommandInterface> subCommands;
+    private final Map<Class<? extends DualSubCommandInterface>, DualSubCommandInterface> subCommands;
 
-    public DualCommandExecutor() {
+    protected DualCommandExecutor() {
         subCommands = new HashMap<Class<? extends DualSubCommandInterface>, DualSubCommandInterface>();
     }
 
@@ -34,7 +33,7 @@ public abstract class DualCommandExecutor implements TabExecutor {
      * subcommand
      * @throws SubCommandException
      */
-    public final void RegisterSubCommand(DualSubCommandInterface sci) throws SubCommandException {
+    protected final void RegisterSubCommand(DualSubCommandInterface sci) throws SubCommandException {
         // If the command is registered, then throw an exception.
         if (subCommands.containsKey(sci.getClass())) {
             throw new SubCommandException("This subcommand is already registered.", sci);
@@ -63,11 +62,9 @@ public abstract class DualCommandExecutor implements TabExecutor {
     }
 
     /**
-     * Execute a subcommand.
+     * Unregister a subcommand.
      *
-     * @param subcommand Subcommand to execute
-     * @param sender Command sender
-     * @param arguments Arguments to subcommand
+     * @param subcommand Subcommand to remove
      * @throws SubCommandNotRegisteredException Thrown if the subcommand is not
      * registered.
      */
@@ -86,7 +83,7 @@ public abstract class DualCommandExecutor implements TabExecutor {
      *
      * @return Collection of DualSubCommandInterface objects.
      */
-    public final Collection<DualSubCommandInterface> GetSubCommands() {
+    protected final Collection<DualSubCommandInterface> GetSubCommands() {
         return subCommands.values();
     }
 
@@ -166,37 +163,37 @@ public abstract class DualCommandExecutor implements TabExecutor {
      * This method runs if no arguments are supplied to the command.
      *
      * @param sender Sender of the command
-     * @param cmnd Command that has been sent
+     * @param command Command that has been sent
      * @param label Command label
      * @return true or false, dependent on what you wish the onCommand method to
      * return. Should normally be true.
      */
-    public abstract boolean onNoSubCommand(CommandSender sender, Command command, String label);
+    protected abstract boolean onNoSubCommand(CommandSender sender, Command command, String label);
 
     /**
      * This method runs if an invalid subcommand is supplied.
      *
      * @param sender Sender of the command
-     * @param cmnd Command that has been sent
+     * @param command Command that has been sent
      * @param label Command label
      * @param args Arguments originally passed to the command
      * @return true or false, dependent on what you wish the onCommand method to
      * return. Should normally be true.
      */
-    public abstract boolean onInvalidSubCommand(CommandSender sender, Command command, String label, String[] args);
+    protected abstract boolean onInvalidSubCommand(CommandSender sender, Command command, String label, String[] args);
 
     /**
      * This method runs if subcommand is requested but the sender does not have permission.
      *
      * @param sender Sender of the command
-     * @param cmnd Command that has been sent
+     * @param command Command that has been sent
      * @param label Command label
      * @param args Arguments originally passed to the command
      * @param requiredPerms Permissions that are required for the command just executed
      * @return true or false, dependent on what you wish the onCommand method to
      * return. Should normally be true.
      */
-    public abstract boolean onNoPermissionsSubCommand(CommandSender sender, Command command, String label, String[] args, List<String> requiredPerms);
+    protected abstract boolean onNoPermissionsSubCommand(CommandSender sender, Command command, String label, String[] args, List<String> requiredPerms);
     
     /**
      * Get the instance associated with a subcommand.

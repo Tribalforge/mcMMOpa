@@ -53,15 +53,17 @@ public class FixPartiesCommand implements CommandExecutor {
 
         for (Party p : parties) {
             // Avoiding concurrent modifcation exceptions
-            List<OfflinePlayer> pl = new ArrayList<OfflinePlayer>(p.getMembers());
+            List<String> pl = new ArrayList<String>(p.getMembers());
 
-            for (OfflinePlayer player : pl) {
+            for (String pa : pl) {
+                OfflinePlayer player = PartyAdmin.getPlugin().getServer().getOfflinePlayer(pa);
+                
                 // If player is online and not put into the playermap yet
                 if (player.isOnline()) {
                     if (playermap.containsKey(player)) {
                         cs.sendMessage(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
                         PartyAdmin.getPlugin().getLogger().info(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
-                        p.getMembers().remove(player); // Player is alread registered, so remove this entry
+                        p.getMembers().remove(pa); // Player is alread registered, so remove this entry
                         continue;
                     }
                     
@@ -75,7 +77,7 @@ public class FixPartiesCommand implements CommandExecutor {
                     if (a != p) { // Not in the party we are checking
                         cs.sendMessage(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
                         PartyAdmin.getPlugin().getLogger().info(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
-                        p.getMembers().remove(player);
+                        p.getMembers().remove(pa);
                     } else { // We are in the party. We can make all checks as normal after this one.
                         playermap.put(player, a);
                     }
@@ -87,20 +89,19 @@ public class FixPartiesCommand implements CommandExecutor {
                     if (playermap.get(player) == p) { // Duplication in the same party.
                         cs.sendMessage(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
                         PartyAdmin.getPlugin().getLogger().info(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
-                        p.getMembers().remove(p.getMembers().lastIndexOf(player)); // Remove an instance
+                        p.getMembers().remove(pa); // Remove an instance
                         continue;
                     }
 
                     // Player is the leader in this party, but not online. We want to move players only if they are offline...
                     if (p.getLeader().equals(player.getName()) && !player.isOnline()) {
-                        playermap.get(player).getMembers().remove(player); // Remove player from previous party
+                        playermap.get(player).getMembers().remove(pa); // Remove player from previous party
                         playermap.remove(player); // Remove from player map
                         playermap.put(player, p); // Add to player map a new
                     } else {
                         cs.sendMessage(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
                         PartyAdmin.getPlugin().getLogger().info(L10n.getString("Commands.FixParties.RemoveDuplicate", player.getName(), p.getName()));
-                        p.getMembers().remove(player);
-                        continue;
+                        p.getMembers().remove(pa);
                     }
                 } else {
                     playermap.put(player, p); // Put the OfflinePlayer into the playermap

@@ -40,8 +40,6 @@ public class PartyAdmin extends JavaPlugin {
 
     private static PartyAdmin plugin;
     private static mcMMO mcmmo;
-    private PartyChangeListener pa;
-    private PartyChatListener pc;
     private PartySpy ps;
 
 
@@ -63,8 +61,8 @@ public class PartyAdmin extends JavaPlugin {
             return;
         }
         this.getServer().getLogger().info(L10n.getString("Enable.CheckSucceeded"));
-        pa = new PartyChangeListener();
-        pc = new PartyChatListener();
+        PartyChangeListener pa = new PartyChangeListener();
+        PartyChatListener pc = new PartyChatListener();
 
         getServer().getPluginManager().registerEvents(pa, this);
         getServer().getPluginManager().registerEvents(pc, this);
@@ -89,6 +87,7 @@ public class PartyAdmin extends JavaPlugin {
      * 
      * @return true if so, false otherwise
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean checkForRequiredMethod() {
    
         // Reflection!
@@ -115,10 +114,10 @@ public class PartyAdmin extends JavaPlugin {
 
         //If we have found a plugin by the name of "mcMMO", check if it is actually
         //mcMMO. If not, or if we didn't find it, then it's not loaded in.
-        if (plugin == null || !(plugin instanceof mcMMO)) {
-            return false; //Nope, it's not loaded.
+        if (plugin != null && (plugin instanceof mcMMO)) {
+            mcmmo = (mcMMO) plugin;
+            return true; //It's loaded.
         }
-        mcmmo = (mcMMO) plugin;
         return true;
     }
     
@@ -137,13 +136,5 @@ public class PartyAdmin extends JavaPlugin {
      */
     public static PartyAdmin getPlugin() {
         return plugin;
-    }
-    
-    /**
-     * Gets the mcmmo plugin.
-     * @return McMMO plugin
-     */
-    public static mcMMO getMcMMO() {
-        return mcmmo;
     }
 }

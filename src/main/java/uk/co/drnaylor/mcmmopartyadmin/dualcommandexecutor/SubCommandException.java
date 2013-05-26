@@ -2,8 +2,8 @@ package uk.co.drnaylor.mcmmopartyadmin.dualcommandexecutor;
 
 public class SubCommandException extends Exception {
     
-	final String errorMessage; 
-    final DualSubCommandInterface subCommand;
+	private final String errorMessage;
+    private final DualSubCommandInterface subCommand;
 	
 	public SubCommandException(String errorMessage, DualSubCommandInterface subCommand) {
 		this.errorMessage = errorMessage;

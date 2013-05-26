@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import uk.co.drnaylor.mcmmopartyadmin.PartyAdmin;
 import uk.co.drnaylor.mcmmopartyadmin.dualcommandexecutor.DualSubCommandInterface;
 import uk.co.drnaylor.mcmmopartyadmin.locales.L10n;
 
@@ -21,7 +22,7 @@ public class ListPartiesSubCommand implements DualSubCommandInterface {
     }
 
     public List<String> getSubCommands() {
-        return Arrays.asList(new String[] {"list"});
+        return Arrays.asList("list");
     }
 
     public String getShortHelp() {
@@ -93,7 +94,9 @@ public class ListPartiesSubCommand implements DualSubCommandInterface {
                 tempList.append(":");
 
                 // Over all players
-                for (OfflinePlayer otherPlayerName : a.getMembers()) {
+                for (String pa : a.getMembers()) {
+                    OfflinePlayer otherPlayerName = PartyAdmin.getPlugin().getServer().getOfflinePlayer(pa);
+                    
                     tempList.append(" ");
                     if (leader.equals(otherPlayerName.getName())) {
                         // Leader in Gold

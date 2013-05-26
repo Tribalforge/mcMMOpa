@@ -39,7 +39,7 @@ public class RemovePlayerSubCommand implements DualSubCommandInterface {
     }
 
     public List<String> getSubCommands() {
-        return Arrays.asList(new String[] {"removeplayer", "kickplayer", "rpl"});
+        return Arrays.asList("removeplayer", "kickplayer", "rpl");
     }
 
     public String getShortHelp() {
