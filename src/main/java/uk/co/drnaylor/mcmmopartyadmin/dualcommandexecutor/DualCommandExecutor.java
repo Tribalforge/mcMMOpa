@@ -146,7 +146,7 @@ public abstract class DualCommandExecutor implements TabExecutor {
             if (!"".equals(args[args.length - 1])) {
                 List<String> temp = new ArrayList<String>(s);
                 for (String t : temp) {
-                    if (!(t.startsWith(args[args.length - 1]))) {
+                    if (!(t.toLowerCase().startsWith(args[args.length - 1].toLowerCase()))) {
                         s.remove(t);
                     }
                 }
