@@ -4,7 +4,7 @@
 
     <groupId>uk.co.drnaylor.mcmmopartyadmin</groupId>
     <artifactId>mcmmoPartyAdmin</artifactId>
-    <version>0.6-dev1</version>
+    <version>0.6</version>
     <packaging>jar</packaging>
 
     <name>mcmmoPartyAdmin</name>
@@ -64,22 +64,16 @@
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.gmail.nossr50.mcMMO</groupId>
             <artifactId>mcMMO</artifactId>
-            <version>LATEST</version>
+            <version>1.5.00</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.4.7-R1.0</version>
+            <version>1.7.9-R0.2</version>
         </dependency>
     </dependencies>
   
@@ -98,7 +92,7 @@
         </repository>
         <repository>
             <id>mcmmo-repo</id>
-            <url>http://repo.mcmmo.info/</url>
+            <url>http://repo.md-5.net/content/repositories/releases/</url>
         </repository>
     </repositories>
   

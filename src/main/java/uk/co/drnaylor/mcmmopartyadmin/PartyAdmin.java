@@ -28,10 +28,8 @@ import com.gmail.nossr50.locale.LocaleLoader;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.gmail.nossr50.mcMMO;
 import com.gmail.nossr50.party.PartyManager;
-import com.gmail.nossr50.util.player.UserManager;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
 import uk.co.drnaylor.mcmmopartyadmin.commands.FixPartiesCommand;
 import uk.co.drnaylor.mcmmopartyadmin.locales.L10n;
@@ -93,9 +91,8 @@ public class PartyAdmin extends JavaPlugin {
         // Reflection!
         try {            
             Method m = PartyManager.class.getMethod("disbandParty", new Class[]{Party.class});
-            Method n = UserManager.class.getMethod("getPlayer", new Class[]{OfflinePlayer.class});
             Method o = LocaleLoader.class.getMethod("getCurrentLocale");
-            return ((m != null) && (n != null) && (o != null));
+            return ((m != null) && (o != null));
         } catch (Exception e) {
             // doesn't matter
         }
@@ -110,12 +107,12 @@ public class PartyAdmin extends JavaPlugin {
      */
     private boolean isMcmmoAvailable() {
         // Checking for mcMMO, just in case
-        Plugin plugin = this.getServer().getPluginManager().getPlugin("mcMMO");
+        Plugin pl = this.getServer().getPluginManager().getPlugin("mcMMO");
 
         //If we have found a plugin by the name of "mcMMO", check if it is actually
         //mcMMO. If not, or if we didn't find it, then it's not loaded in.
-        if (plugin != null && (plugin instanceof mcMMO)) {
-            mcmmo = (mcMMO) plugin;
+        if (pl != null && (pl instanceof mcMMO)) {
+            mcmmo = (mcMMO) pl;
             return true; //It's loaded.
         }
         return true;
@@ -136,5 +133,14 @@ public class PartyAdmin extends JavaPlugin {
      */
     public static PartyAdmin getPlugin() {
         return plugin;
+    }
+    
+    /**
+     * Gets mcMMO
+     * 
+     * @return 
+     */
+    public static mcMMO getMcMMO() {
+        return mcmmo;
     }
 }

@@ -51,7 +51,7 @@ public class DeprecatedPartyAdminCommand implements TabExecutor {
     private final String[] removeparty = {"removeparty", "remparty", "delparty", "rp"};
     private final String[] chat = {"chat", "pc"};
     
-    private HashMap<CommandSender,List<String>> auto;
+    private final HashMap<CommandSender,List<String>> auto;
 
     public DeprecatedPartyAdminCommand() {
         this.auto = new HashMap<CommandSender,List<String>>();
@@ -351,13 +351,13 @@ public class DeprecatedPartyAdminCommand implements TabExecutor {
     private void changePartyOwner(CommandSender sender, String player, String partyName) {
         OfflinePlayer targetPlayer = PartyAdmin.getPlugin().getServer().getOfflinePlayer(player);
 
-        if (targetPlayer == null) {
+        if (targetPlayer == null || !targetPlayer.hasPlayedBefore()) {
             // Player doesn't exist
             sender.sendMessage(L10n.getString("Player.NotFound", player));
             return;
         }
 
-        McMMOPlayer mcplayer = UserManager.getPlayer(targetPlayer);
+        McMMOPlayer mcplayer = UserManager.getPlayer(player);
         Party party = mcplayer.getParty();
 
         if (party.getName().equals(partyName)) {

@@ -37,7 +37,7 @@ import uk.co.drnaylor.mcmmopartyadmin.locales.L10n;
 
 public class ChangeOwnerSubCommand implements DualSubCommandInterface {
 
-    private List<String> permissions = new ArrayList<String>();
+    private final List<String> permissions = new ArrayList<String>();
 
     public ChangeOwnerSubCommand() {
         permissions.add("mcmmopartyadmin.admin");
@@ -101,7 +101,7 @@ public class ChangeOwnerSubCommand implements DualSubCommandInterface {
             return;
         }
 
-        McMMOPlayer mcplayer = UserManager.getPlayer(targetPlayer);
+        McMMOPlayer mcplayer = UserManager.getPlayer(player);
         Party party = mcplayer.getParty();
 
         if (party.getName().equals(partyName)) {
