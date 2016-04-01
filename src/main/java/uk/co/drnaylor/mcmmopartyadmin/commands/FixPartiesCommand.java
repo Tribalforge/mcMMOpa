@@ -53,7 +53,7 @@ public class FixPartiesCommand implements CommandExecutor {
 
         for (Party p : parties) {
             // Avoiding concurrent modifcation exceptions
-            List<String> pl = new ArrayList<String>(p.getMembers());
+			final List<String> pl = new ArrayList<String>(p.getMembers().values());
 
             for (String pa : pl) {
                 OfflinePlayer player = PartyAdmin.getPlugin().getServer().getOfflinePlayer(pa);

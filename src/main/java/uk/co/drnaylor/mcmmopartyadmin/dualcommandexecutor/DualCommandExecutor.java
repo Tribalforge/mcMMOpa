@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
 /**
- * Class that handles commands and dynamically registering sub commands for a command within 
+ * Class that handles commands and dynamically registering sub commands for a command within
  * plugin. Cannot be instantiated.
  *
  * @author Daniel Naylor
@@ -98,7 +98,6 @@ public abstract class DualCommandExecutor implements TabExecutor {
      * subcommand, if any.
      * @return Should normally be true.
      */
-    @Override
     public final boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args == null || args.length == 0) {
             return onNoSubCommand(sender, command, label);
@@ -115,10 +114,10 @@ public abstract class DualCommandExecutor implements TabExecutor {
             return onNoPermissionsSubCommand(sender, command, label, args, e.getRequiredPermissions());
         }
     }
-    
+
     /**
-     * Autocompletes the command on TAB. If there is zero or one partially written argument, provide a list of subcommands. 
-     * Otherwise, pass through to the "onSubCommandTabComplete" command, which should be overridden by subclasses. 
+     * Autocompletes the command on TAB. If there is zero or one partially written argument, provide a list of subcommands.
+     * Otherwise, pass through to the "onSubCommandTabComplete" command, which should be overridden by subclasses.
      * This method cannot be overridden.
      *
      * @param sender Sender of the command
@@ -128,14 +127,13 @@ public abstract class DualCommandExecutor implements TabExecutor {
      * subcommand, if any.
      * @return Should normally be true.
      */
-    @Override
     public final List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 1) {
             List<String> commands = getPrincipalSubcommands();
             Collections.sort(commands);
             return commands;
         }
-        
+
         // Remove the other arguments before sending to the sub command.
         String[] subargs = args.clone();
         subargs = (String[]) ArrayUtils.remove(subargs, 0);
@@ -156,7 +154,7 @@ public abstract class DualCommandExecutor implements TabExecutor {
         }
         catch (Exception e) {
             return null;
-        } 
+        }
     }
 
     /**
@@ -194,7 +192,7 @@ public abstract class DualCommandExecutor implements TabExecutor {
      * return. Should normally be true.
      */
     protected abstract boolean onNoPermissionsSubCommand(CommandSender sender, Command command, String label, String[] args, List<String> requiredPerms);
-    
+
     /**
      * Get the instance associated with a subcommand.
      *
@@ -212,7 +210,7 @@ public abstract class DualCommandExecutor implements TabExecutor {
         // Throws exception if no instance uses that subcommand
         throw new SubCommandNotRegisteredException("The subcommand " + sub + " is not registered.");
     }
-    
+
     private List<String> getAllSubcommands() {
         List<String> s = new LinkedList<String>();
         for (DualSubCommandInterface sc : subCommands.values()) {
@@ -220,7 +218,7 @@ public abstract class DualCommandExecutor implements TabExecutor {
         }
         return s;
     }
-    
+
     private List<String> getPrincipalSubcommands() {
         List<String> s = new LinkedList<String>();
         for (DualSubCommandInterface sc : subCommands.values()) {
