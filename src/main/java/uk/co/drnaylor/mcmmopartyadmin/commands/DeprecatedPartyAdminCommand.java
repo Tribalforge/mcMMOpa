@@ -222,7 +222,7 @@ public class DeprecatedPartyAdminCommand implements TabExecutor {
                 tempList.append(":");
                 
                 // Over all players
-                for (String pa : a.getMembers()) {
+                for (String pa : a.getMembers().values()) {
                     OfflinePlayer otherPlayerName = PartyAdmin.getPlugin().getServer().getOfflinePlayer(pa);
                     
                     tempList.append(" ");
